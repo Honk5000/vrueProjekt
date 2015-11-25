@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OpenTracker SYSTEM "opentracker.dtd">
+<OpenTracker>
+  <configuration>
+    <!--<ConsoleConfig display="off"/>-->
+	<VRPNConfig port="38883"/>
+	 <ConsoleConfig display="off"/>
+    <TimeConfig sleep="10" display="true"/>
+    <SpaceDeviceConfig />
+  </configuration>
+
+	<ConsoleSink comment="Spacenavigator console" active="on">
+		<UnitySink name="SpaceMouse">
+			<!-- 1st person view, rotate by 180° around y-axis without x-axes mirrowing-->
+			<EventTransform scale="-0.01 -0.01 -0.01" rotationtype="euler" rotation="1.57 3.14159 3.14159" translation="0 0 0">
+			
+			<!-- 1st person view, rotate by 180° around y-axis with x-axes mirrowing-->
+			<!--<EventTransform scale="0.01 0.01 0.01" rotationtype="euler" rotation="1.57 0 0" translation="0 0 0">-->
+			
+			<!-- 3rd person view -->
+			<!-- Rotate coordinate system by x = 270° ( = Unity3D.x) = z = 180 deg ( = Unity3D.y) -->
+			<!--<EventTransform scale="-0.01 -0.01 -0.01" rotationtype="euler" rotation="1.57 0 3.14159" translation="0 0 0">-->
+				<SpaceDeviceSource />
+			</EventTransform>
+		</UnitySink>
+	</ConsoleSink>
+
+	<UnitySink name="Head">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="0"/>	 
+		</EventTransform>
+	</UnitySink>
+	<UnitySink name="Neck">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="1"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="Torso">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="2"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="Waist">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="3"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftCollar">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="4"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftShoulder">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="5"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftElbow">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="6"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftWrist">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="7"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftHand">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="8"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftFingertip">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="9"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightCollar">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="10"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightShoulder">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="11"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightElbow">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="12"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightWrist">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="13"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightHand">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="14"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightFingertip">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="15"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftHip">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="16"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftKnee">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="17"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftAnkle">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="18"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="LeftFoot">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="19"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightHip">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="20"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightKnee">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="21"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightAnkle">	
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="22"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	<UnitySink name="RightFoot">
+		<EventTransform scale="1 1 -1" rotationtype="euler" rotation="0 0 0" translation="0 0.55 2.5">
+			<VRPNSource name="Tracker0@localhost:3883" type="tracker" station="23"/>	  	
+		</EventTransform> 
+	</UnitySink>
+	
+	
+</OpenTracker>
