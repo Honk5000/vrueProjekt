@@ -25,11 +25,15 @@
  */
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 /// <summary>
 /// ObjectController class is a component that makes an object selectable and transformable
 /// </summary>
 public class ObjectController : MonoBehaviour
 {
+	//zum speichern der Fraben der Objekte
+	public List<Color> colourList;
+
     /// <summary>
     /// true if not selected by an interaction-device
     /// </summary>
@@ -93,4 +97,6 @@ public class ObjectController : MonoBehaviour
         }
         return false;
     }
+
+
 }

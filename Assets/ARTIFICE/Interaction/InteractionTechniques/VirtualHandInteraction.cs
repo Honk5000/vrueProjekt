@@ -26,6 +26,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class to select and manipulate scene objects with Virtual hand interaction technique (IT). 
@@ -97,7 +98,11 @@ public class VirtualHandInteraction : ObjectSelectionBase
                 //Debug.Log(collidee.GetInstanceID());
 
                 // change color so user knows of intersection
-                collidee.renderer.material.SetColor("_Color", Color.blue);
+
+				//look if renderer exists, if not -> change the colour of the child objects
+                //collidee.renderer.material.SetColor("_Color", Color.blue);
+				List<Color> colourList = changeGameObjectColour(collidee, Color.blue);
+				collidee.GetComponent<ObjectController>().colourList = colourList;
             }
         }
     }
@@ -120,8 +125,63 @@ public class VirtualHandInteraction : ObjectSelectionBase
                 collidees.Remove(collidee.GetInstanceID());
 
                 // change color so user knows of intersection end
-                collidee.renderer.material.SetColor("_Color", Color.white);
+                //collidee.renderer.material.SetColor("_Color", Color.white);
+				resetGameObjectColour(collidee, collidee.GetComponent<ObjectController>().colourList);
             }
         }
     }
+
+	public List<Color> changeGameObjectColour(GameObject obj, Color colour)
+	{
+		List<Color> retList = new List<Color>();
+
+		if (obj.GetComponent<Renderer>().Equals(null))
+		{
+			// do changeGameObjectsColour for all Childs!
+			foreach (Transform child in obj.transform)
+			{
+				List<Color> newList = changeGameObjectColour(child.gameObject, colour);
+				retList.AddRange(newList);
+			}
+
+		}
+		else
+		{
+			//save the old Colour!
+			retList.Add(obj.renderer.material.GetColor("_Color"));
+
+			//Change the colour of this Objects!
+			obj.renderer.material.SetColor("_Color", colour);
+		}
+
+		return retList;
+	}
+
+	public int resetGameObjectColour(GameObject obj, List<Color> colourList, int iterator = 0)
+	{
+		int newIterator = iterator;
+
+		if (obj.GetComponent<Renderer>().Equals(null))
+		{
+			// do changeGameObjectsColour for all Childs!
+			foreach (Transform child in obj.transform)
+			{
+				int addIterator = resetGameObjectColour(child.gameObject, colourList, newIterator);
+				//retList.AddRange(newList);
+
+				newIterator = addIterator;
+			}
+			
+		}
+		else
+		{
+			
+			//Change the colour of this Objects!
+			obj.renderer.material.SetColor("_Color", colourList[newIterator]);
+
+			newIterator ++;
+		}
+		
+		return newIterator;
+	}
 }

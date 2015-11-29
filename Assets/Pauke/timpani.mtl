@@ -1,0 +1,27 @@
+# Wavefront material library
+# Sun Nov 19 11:17:58 2000
+# Created with Viewpoint Interchange www.viewpoint.com
+
+newmtl timpani_silver
+  Ka 0 0 0
+  Kd 0.862745 0.886275 0.905882
+  Ks 1 1 1
+  illum 2
+
+newmtl timpani_black
+  Ka 0 0 0
+  Kd 0 0 0
+  Ks 0.501961 0.501961 0.501961
+  illum 2
+
+newmtl timpani_gold
+  Ka 0 0 0
+  Kd 1 0.8 0.4
+  Ks 0.752941 0.752941 0.752941
+  illum 2
+
+newmtl timpani_drum
+  Ka 0 0 0
+  Kd 0.94902 0.937255 0.890196
+  Ks 0.501961 0.501961 0.501961
+  illum 2
