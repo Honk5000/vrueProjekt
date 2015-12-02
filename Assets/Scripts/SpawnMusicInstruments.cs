@@ -39,9 +39,12 @@ public class SpawnMusicInstruments : MonoBehaviour {
 			if(Input.GetButtonDown("Fire1"))
 			{
 				//just spawn it in front of this game Object
-				Network.Instantiate(instrumentPrefab,transform.position + new Vector3(0, 0, -1) * 1.5f,Quaternion.identity,0);
+				//Network.Instantiate(instrumentPrefab,transform.position + new Vector3(0, 0, -1) * 1.5f,Quaternion.identity,0);
 
-
+				if(!Network.isServer)
+				{
+					networkView.RPC ("spawnInstrument", RPCMode.Server, Network.player);
+				}
 			}
 		}
 	}
@@ -116,5 +119,17 @@ public class SpawnMusicInstruments : MonoBehaviour {
 		}
 		
 		return newIterator;
+	}
+
+	[RPC]
+	public void spawnInstrument(NetworkPlayer player)
+	{
+		GameObject obj = Network.Instantiate(instrumentPrefab,transform.position + new Vector3(0, 0, -1) * 1.5f,Quaternion.identity,0) as GameObject;
+
+		//first set for server player
+		obj.GetComponent<UserManagementObjectController>().OnCreation(Network.player, false);
+
+		//then for client player
+		obj.GetComponent<UserManagementObjectController>().OnCreation(player, true);
 	}
 }

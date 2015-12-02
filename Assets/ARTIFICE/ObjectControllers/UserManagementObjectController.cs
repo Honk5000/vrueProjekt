@@ -86,6 +86,12 @@ public class UserManagementObjectController : ExclusiveAccessObjectController
         accessGrantedPlayer = UserManager.instance.getNetworkPlayer(accessGrantedName);
 	}
 
+	public void OnCreation(NetworkPlayer player, bool isClient)
+	{
+		UserManager.instance.AddNewPlayer(player,isClient);
+		accessGrantedPlayer = UserManager.instance.getNetworkPlayer(accessGrantedName);
+	}
+
     /// <summary>
     /// Server-Callback
     /// If a player, that is allowed to access the object exits, we have to reset.
