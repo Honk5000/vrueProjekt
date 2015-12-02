@@ -69,9 +69,16 @@ public class SpawnPrefab : MonoBehaviour {
 	/// </summary>
     private void SpawnNetworkObject()
     {
+
         //create prefab
-        Network.Instantiate(playerPrefab, transform.position, transform.rotation, 0);
+        GameObject gameObject = Network.Instantiate(playerPrefab, transform.position, transform.rotation, 0) as GameObject;
 		this.networkView.RPC("relocateObjectRPC", RPCMode.AllBuffered);	
+		 
+		// if
+		GameObject virtualHand = GameObject.Find ("VirtualHand (Clone)");
+		if (virtualHand != null) {
+			Debug.Log ("Have virtual hand");
+		}
     }
 	
 	/// <summary>
