@@ -44,12 +44,12 @@ public class InstrumentController : UserManagementObjectController
 	[RPC]
 	public void startPlayingRPC() {
 		audioSourceComponent.Play();
-		this.accessGrantedName = "player1";
+		this.setAccessGrantedName ("player1");
 	} 
 	[RPC]
 	public void stopPlayingRPC() {
 		audioSourceComponent.Stop();
-		this.accessGrantedName = "player2"; 
+		this.setAccessGrantedName ("player2");
 	} 
 
 

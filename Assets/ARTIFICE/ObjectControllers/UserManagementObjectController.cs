@@ -33,7 +33,11 @@ public class UserManagementObjectController : ExclusiveAccessObjectController
     /// Name of the player that is assigned in Unity-editor, only player1, player2,.... allowed
     /// </summary>
     public string accessGrantedName = "player1";
+	public void setAccessGrantedName(string newName) {
+		accessGrantedName = newName;
+		accessGrantedPlayer = UserManager.instance.getNetworkPlayer(accessGrantedName);
 
+	}
     /// <summary>
     /// NetworkPlayer that is associated with the name above in UserManager
     /// </summary>
