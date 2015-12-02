@@ -8,25 +8,35 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
-namespace AssemblyCSharp
+using UnityEngine;
+
+[RequireComponent(typeof(AudioSource))]
+public class InstrumentController : UserManagementObjectController
 {
-	public class InstrumentController : UserManagementObjectController
-	{
-		public InstrumentController ()
-		{
-		}
-		private bool _active;
-		public bool active {
-			get {
-				return _active;
-			}
-			set {
-				_active = value;
-
-			}
-		}
-
-
+	private AudioSource audioSourceComponent;
+	public void Start() {
+		audioSourceComponent = this.GetComponent<AudioSource>();
 	}
+	public InstrumentController ()
+	{
+	}
+	private bool _playing;
+	public bool playing {
+		get {
+			return _playing;
+		}
+		set {
+			_playing = value;
+			if (value) {
+				audioSourceComponent.Play();
+			}
+			else {
+				audioSourceComponent.Stop();
+			}
+		}
+	}
+
+
 }
+
 

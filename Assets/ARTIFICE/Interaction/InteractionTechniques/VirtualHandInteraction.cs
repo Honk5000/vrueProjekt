@@ -38,8 +38,12 @@ public class VirtualHandInteraction : ObjectSelectionBase
 {
     GameObject tracker = null;
 
+
+
     /// <summary>
     /// </summary>
+	/// 
+	/// 
     public void Start()
     {
         tracker = GameObject.Find("TrackerObject");

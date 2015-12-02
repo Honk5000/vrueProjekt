@@ -26,6 +26,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class to select and manipulate scene objects with HOMER interaction technique (IT). 
@@ -42,7 +43,8 @@ public class HomerInteraction : ObjectSelectionBase
 	private LineRenderer lineRenderer;
 	private GameObject tracker = null;
 	private GameObject interactionOrigin = null;
-	
+	public GameObject selectedInstrument = null;
+
 	public bool multipleSelection;
 
 	public Vector3 virtualHandPivot = Vector3.zero;
@@ -58,7 +60,8 @@ public class HomerInteraction : ObjectSelectionBase
 		
 		//die virtual Camera simuliert meinen Torso
 		interactionOrigin = GameObject.Find (torsoName);
-		
+
+
 		multipleSelection = false;
 	}
 	
@@ -123,7 +126,7 @@ public class HomerInteraction : ObjectSelectionBase
 							{
 								collidees.Remove(col.GetInstanceID());
 								//change the color back to normal
-								col.renderer.material.SetColor("_Color", Color.white);
+								resetGameObjectColour(col, col.GetComponent<ObjectController>().colourList);
 							}
 						}
 						
@@ -141,7 +144,8 @@ public class HomerInteraction : ObjectSelectionBase
 									collidees.Add(collidee.GetInstanceID(), collidee);
 									
 									// change color so user knows of intersection
-									collidee.renderer.material.SetColor("_Color", Color.blue);
+									List<Color> colourList = changeGameObjectColour(collidee, Color.blue);
+									collidee.GetComponent<ObjectController>().colourList = colourList;
 								}
 								
 								//add this object to the pivot point candidates
@@ -179,31 +183,37 @@ public class HomerInteraction : ObjectSelectionBase
 							}
 						}
 						
-						if (hitGm == null)
-						{
-							return;
-						}
+
 						
 						Hashtable collideesCopy = new Hashtable(collidees);
-						
+						//selectedInstrument = null;
 						foreach (DictionaryEntry pair in collideesCopy)
 						{
 							GameObject col = pair.Value as GameObject;
 							
-							if(hitGm.GetInstanceID() != col.GetInstanceID())
+							if(hitGm == null || hitGm.GetInstanceID() != col.GetInstanceID())
 							{
 								collidees.Remove(col.GetInstanceID());
 								//change the color back to normal
-								col.renderer.material.SetColor("_Color", Color.white);
+								resetGameObjectColour(col, col.GetComponent<ObjectController>().colourList);
+								if (col.Equals (selectedInstrument)) {
+									selectedInstrument = null; 
+
+								}
 							}
 						}
-						
+						if (hitGm == null)
+						{
+							return;
+						}
 						if(!collidees.Contains(hitGm.GetInstanceID()))
 						{
 							collidees.Add(hitGm.GetInstanceID(), hitGm);
-							
+							selectedInstrument = hitGm;
+							Debug.Log ("neues SELECTED INSTRUMENT");
 							// change color so user knows of intersection
-							hitGm.renderer.material.SetColor("_Color", Color.blue);
+							List<Color> colourList = changeGameObjectColour(hitGm, Color.blue);
+							hitGm.GetComponent<ObjectController>().colourList = colourList;
 						}
 						
 						virtualHandPivot = hitGm.transform.position;
@@ -255,6 +265,57 @@ public class HomerInteraction : ObjectSelectionBase
 		// remove the lineRenderer when the gameObject is disabled
 		Destroy (lineRenderer);
 	}
+	public List<Color> changeGameObjectColour(GameObject obj, Color colour)
+	{
+		List<Color> retList = new List<Color>();
+		
+		if (obj.GetComponent<Renderer>().Equals(null))
+		{
+			// do changeGameObjectsColour for all Childs!
+			foreach (Transform child in obj.transform)
+			{
+				List<Color> newList = changeGameObjectColour(child.gameObject, colour);
+				retList.AddRange(newList);
+			}
+			
+		}
+		else
+		{
+			//save the old Colour!
+			retList.Add(obj.renderer.material.GetColor("_Color"));
+			
+			//Change the colour of this Objects!
+			obj.renderer.material.SetColor("_Color", colour);
+		}
+		
+		return retList;
+	}
 	
-	// ------------------ VRUE Tasks END ----------------------------
+	public int resetGameObjectColour(GameObject obj, List<Color> colourList, int iterator = 0)
+	{
+		int newIterator = iterator;
+		
+		if (obj.GetComponent<Renderer>().Equals(null))
+		{
+			// do changeGameObjectsColour for all Childs!
+			foreach (Transform child in obj.transform)
+			{
+				int addIterator = resetGameObjectColour(child.gameObject, colourList, newIterator);
+				//retList.AddRange(newList);
+				
+				newIterator = addIterator;
+			}
+			
+		}
+		else
+		{
+			
+			//Change the colour of this Objects!
+			obj.renderer.material.SetColor("_Color", colourList[newIterator]);
+			
+			newIterator ++;
+		}
+		
+		return newIterator;
+	}
 }
