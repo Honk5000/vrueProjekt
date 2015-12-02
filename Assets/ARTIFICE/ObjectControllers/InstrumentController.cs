@@ -28,13 +28,30 @@ public class InstrumentController : UserManagementObjectController
 		set {
 			_playing = value;
 			if (value) {
-				audioSourceComponent.Play();
+				startPlaying();
 			}
 			else {
-				audioSourceComponent.Stop();
+				stopPlaying ();
 			}
 		}
 	}
+
+	public void startPlaying() {
+		audioSourceComponent.Play();
+	}
+	public void stopPlaying() {
+		audioSourceComponent.Stop();
+	}
+
+	[RPC]
+	public void startPlayingRPC() {
+		this.playing = true;
+	} 
+	[RPC]
+	public void stopPlayingRPC() {
+		this.playing = false;
+	} 
+
 
 
 }
