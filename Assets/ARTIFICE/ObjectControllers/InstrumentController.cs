@@ -41,9 +41,10 @@ public class InstrumentController : UserManagementObjectController
 		}
 	}
 	
-	public float pitchThreshold = 40f;
-	public float pitchSpeed = 0.5f;
+	private float pitchThreshold = 0.25f;
+	private float pitchSpeed = 0.5f;
 	private GestureInputListener inputListenerScript = null;
+	//public float rot;
 
 	[RPC]
 	public void startPlayingRPC() {
@@ -60,19 +61,55 @@ public class InstrumentController : UserManagementObjectController
 	{
 		if(inputListenerScript.selectedViewID.Equals(networkView.viewID) && Network.isClient)
 		{
+			//pitch range should go from 1/3 to 3 (three times slower to three times faster)
+
 			//change the pitch according to the SpaceMouse y Axis rotation
 			GameObject sp = GameObject.Find("Spacemouse");
-			if (sp.transform.rotation.y > pitchThreshold && sp.transform.rotation.y < 180f)
+			//rot = sp.transform.rotation.y;
+			if (sp.transform.rotation.y > pitchThreshold)
 			{
 				//higher pitch!
-				audioSourceComponent.pitch += pitchSpeed * Time.deltaTime;
+				if(audioSourceComponent.pitch >= 1)
+				{
+					//change pitch in normal speed
+					audioSourceComponent.pitch += pitchSpeed * Time.deltaTime;
+				}
+				else
+				{
+					//change pitch in 1/3 of the speed
+					audioSourceComponent.pitch += pitchSpeed/3f * Time.deltaTime;
+				}
+
+				if(audioSourceComponent.pitch > 3)
+					audioSourceComponent.pitch = 3;
 			}
-			if(sp.transform.rotation.y < 360f-pitchThreshold && sp.transform.rotation.y > 180f)
+			if(sp.transform.rotation.y < -pitchThreshold)
 			{
 				//lower pitch!
-				audioSourceComponent.pitch -= pitchSpeed * Time.deltaTime;
+				if(audioSourceComponent.pitch >= 1)
+				{
+					//change pitch in normal speed
+					audioSourceComponent.pitch -= pitchSpeed * Time.deltaTime;
+				}
+				else
+				{
+					//change pitch in 1/3 of the speed
+					audioSourceComponent.pitch -= pitchSpeed/3f * Time.deltaTime;
+				}
+				
+				if(audioSourceComponent.pitch < 1f/3f)
+					audioSourceComponent.pitch = 1f/3f;
 			}
+
+			//now make an RPC call to the server to send the new pitch value
+			networkView.RPC ("SetPitchRPC", RPCMode.Server, audioSourceComponent.pitch);
 		}
+	}
+
+	[RPC]
+	public void SetPitchRPC(float pitchValue)
+	{
+		audioSourceComponent.pitch = pitchValue;
 	}
 
 }
