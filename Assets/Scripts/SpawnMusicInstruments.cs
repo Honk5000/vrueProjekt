@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class SpawnMusicInstruments : MonoBehaviour {
 
 	public GameObject instrumentPrefab;
-	private bool isClient = false;
 
 	private List<Color> colourList;
 
@@ -18,23 +17,11 @@ public class SpawnMusicInstruments : MonoBehaviour {
 	void Update () {
 	
 	}
-
-	public void OnConnectedToServer()
-	{
-		//I am the client
-		isClient = true;
-	}
-
-	void OnServerInitialized() 
-	{
-		//I am the server
-		isClient = false;
-	}
 	
 	public void OnTriggerStay (Collider other)
 	{
 		//If the virtual Hand is in the trigger range
-		if(isClient && other.gameObject.name.Equals("VirtualHand(Clone)"))
+		if(Network.isClient && other.gameObject.name.Equals("VirtualHand(Clone)"))
 		{
 			if(Input.GetButtonDown("Fire1"))
 			{
@@ -52,7 +39,7 @@ public class SpawnMusicInstruments : MonoBehaviour {
 	public void OnTriggerEnter (Collider other)
 	{
 		//If the virtual Hand enters the trigger
-		if(isClient && other.gameObject.name.Equals("VirtualHand(Clone)"))
+		if(Network.isClient && other.gameObject.name.Equals("VirtualHand(Clone)"))
 		{
 			colourList = changeGameObjectColour(gameObject, Color.black);
 		}
@@ -61,7 +48,7 @@ public class SpawnMusicInstruments : MonoBehaviour {
 	public void OnTriggerExit (Collider other)
 	{
 		//If the virtual Hand exits the trigger
-		if(isClient && other.gameObject.name.Equals("VirtualHand(Clone)"))
+		if(Network.isClient && other.gameObject.name.Equals("VirtualHand(Clone)"))
 		{
 			resetGameObjectColour(gameObject, colourList);
 		}

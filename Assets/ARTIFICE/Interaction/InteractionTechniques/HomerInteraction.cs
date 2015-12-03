@@ -210,7 +210,7 @@ public class HomerInteraction : ObjectSelectionBase
 						{
 							collidees.Add(hitGm.GetInstanceID(), hitGm);
 							selectedInstrument = hitGm;
-							Debug.Log ("neues SELECTED INSTRUMENT");
+							//Debug.Log ("neues SELECTED INSTRUMENT");
 							// change color so user knows of intersection
 							List<Color> colourList = changeGameObjectColour(hitGm, Color.blue);
 							hitGm.GetComponent<ObjectController>().colourList = colourList;
