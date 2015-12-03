@@ -5,7 +5,7 @@ public class GestureInputListener : MonoBehaviour {
 	public string activateInstrumentKeyName = "Fire2";
 	public string virtualHandServerName = "VirtualHandServer(Clone)";
 
-	public GameObject oldSelected = null;
+	public NetworkViewID selectedViewID;
 
 	// Use this for initialization
 	GameObject _virtualHand;
@@ -35,34 +35,18 @@ public class GestureInputListener : MonoBehaviour {
 				if (h == null) return;
 				//Debug.Log("Habe HOMER");
 				GameObject sel = h.selectedInstrument;
-				//tell the gameObject, that it is selected!
-				if(sel == null && oldSelected != null)
-				{
-					//deselect the oldSelected
-					oldSelected.GetComponent<InstrumentController>().DeselectObject();
-					oldSelected = null;
-				}
 
+				if(sel != null)
+					selectedViewID = sel.networkView.viewID;
+				else
+					selectedViewID = NetworkViewID.unassigned;
+
+				//Debug.Log ("Sending NetwrokViewID: " + selectedViewID);
+				networkView.RPC("SyncSelectedRPC", RPCMode.Others, selectedViewID);
 				if (sel == null) return;
 
 				//Debug.Log("Habe Selected Object");
 				InstrumentController ic = sel.GetComponent<InstrumentController>();
-
-				if(sel != oldSelected && sel != null)
-				{
-					//Debug.Log ("SELECTED");
-					//new selection
-					if(ic != null)
-					{
-						sel.GetComponent<InstrumentController>().SelectObject();
-					}
-					//deselect the old, if it exists
-					if(oldSelected != null)
-					{
-						oldSelected.GetComponent<InstrumentController>().DeselectObject();
-					}
-					oldSelected = sel;
-				}
 
 				if (ic == null) return;
 
@@ -74,5 +58,12 @@ public class GestureInputListener : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	[RPC]
+	public void SyncSelectedRPC(NetworkViewID selViewID)
+	{
+		//Debug.Log ("Getting NetwrokViewID: " + selViewID);
+		selectedViewID = selViewID;
 	}
 }

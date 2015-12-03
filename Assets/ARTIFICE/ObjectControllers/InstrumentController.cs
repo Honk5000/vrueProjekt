@@ -16,6 +16,8 @@ public class InstrumentController : UserManagementObjectController
 	private AudioSource audioSourceComponent;
 	public void Start() {
 		audioSourceComponent = this.GetComponent<AudioSource>();
+
+		inputListenerScript = GameObject.Find ("InputListenerObject").GetComponent<GestureInputListener>();
 	}
 	public InstrumentController ()
 	{
@@ -38,39 +40,10 @@ public class InstrumentController : UserManagementObjectController
 			}
 		}
 	}
-
-	public bool isSelected = false;
+	
 	public float pitchThreshold = 40f;
 	public float pitchSpeed = 0.5f;
-
-	public void SelectObject()
-	{
-		Debug.Log ("Lets go RPC! select");
-		//RPC call to the client
-		networkView.RPC ("SelectObjectRPC", RPCMode.All);
-	}
-
-	public void DeselectObject()
-	{
-		Debug.Log ("Lets go RPC! deselect");
-		//RPC call to the client
-		networkView.RPC ("DeselectObjectRPC", RPCMode.All);
-	}
-
-	[RPC]
-	public void SelectObjectRPC()
-	{
-		Debug.Log ("RPC! select");
-		isSelected = true;
-	}
-
-	[RPC]
-	public void DeselectObjectRPC()
-	{
-		Debug.Log ("RPC! deselect");
-		isSelected = false;
-	}
-
+	private GestureInputListener inputListenerScript = null;
 
 	[RPC]
 	public void startPlayingRPC() {
@@ -85,7 +58,7 @@ public class InstrumentController : UserManagementObjectController
 
 	public void Update()
 	{
-		if(isSelected && Network.isClient)
+		if(inputListenerScript.selectedViewID.Equals(networkView.viewID) && Network.isClient)
 		{
 			//change the pitch according to the SpaceMouse y Axis rotation
 			GameObject sp = GameObject.Find("Spacemouse");

@@ -26,6 +26,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// ObjectSelectionBase is a component, that derives from InteractionBase. All interaction techniques must derive from this class. 
@@ -147,7 +148,63 @@ public class ObjectSelectionBase: InteractionBase
 	{
 	}
 	
-
+	public List<Color> changeGameObjectColour(GameObject obj, Color colour)
+	{
+		//Debug.Log ("Set colour to: " + colour.ToString());
+		List<Color> retList = new List<Color>();
+		//Debug.Log ("After List creation");
+		
+		if (obj.GetComponent<Renderer>() == null)
+		{
+			//Debug.Log ("Is null! -> go Down!");
+			// do changeGameObjectsColour for all Childs!
+			foreach (Transform child in obj.transform)
+			{
+				List<Color> newList = changeGameObjectColour(child.gameObject, colour);
+				retList.AddRange(newList);
+			}
+			
+		}
+		else
+		{
+			//Debug.Log ("Is not null! -> change colour!");
+			//save the old Colour!
+			retList.Add(obj.renderer.material.GetColor("_Color"));
+			
+			//Change the colour of this Objects!
+			obj.renderer.material.SetColor("_Color", colour);
+		}
+		
+		return retList;
+	}
+	
+	public int resetGameObjectColour(GameObject obj, List<Color> colourList, int iterator = 0)
+	{
+		int newIterator = iterator;
+		
+		if (obj.GetComponent<Renderer>() == null)
+		{
+			// do changeGameObjectsColour for all Childs!
+			foreach (Transform child in obj.transform)
+			{
+				int addIterator = resetGameObjectColour(child.gameObject, colourList, newIterator);
+				//retList.AddRange(newList);
+				
+				newIterator = addIterator;
+			}
+			
+		}
+		else
+		{
+			
+			//Change the colour of this Objects!
+			obj.renderer.material.SetColor("_Color", colourList[newIterator]);
+			
+			newIterator ++;
+		}
+		
+		return newIterator;
+	}
 }
 
 
