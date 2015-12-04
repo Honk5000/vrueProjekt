@@ -18,6 +18,11 @@ public class InstrumentController : UserManagementObjectController
 		audioSourceComponent = this.GetComponent<AudioSource>();
 
 		inputListenerScript = GameObject.Find ("InputListenerObject").GetComponent<GestureInputListener>();
+
+		InstrumentManager.instance.allInstruments.Add (this.gameObject);
+		Debug.Log ("Instrument count: " + InstrumentManager.instance.allInstruments.Count);
+		
+		
 	}
 	public InstrumentController ()
 	{

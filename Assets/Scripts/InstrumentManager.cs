@@ -26,7 +26,7 @@ public class InstrumentManager : ScriptableObject
 		{
 			lock (padlock)
 			{
-				return (manager ? manager : manager = new InstrumentManager());
+				return ( manager ? manager : manager = InstrumentManager.CreateInstance<InstrumentManager>() );
 			}
 		}
 	}
@@ -45,7 +45,9 @@ public class InstrumentManager : ScriptableObject
 
 	// set a common volume for all instruments
 	public void setVolumeForAllInstruments(float volume) {
+		Debug.Log("SETVOLU " + this.allInstruments.Count);
 		foreach (GameObject instrument in this.allInstruments) {
+
 			instrument.GetComponent<AudioSource>().volume = volume;
 		}
 	}

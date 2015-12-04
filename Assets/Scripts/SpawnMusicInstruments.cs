@@ -120,6 +120,7 @@ public class SpawnMusicInstruments : MonoBehaviour {
 		obj.GetComponent<UserManagementObjectController>().OnCreation(player, true);
 
 		// add instrument to the global collection
-		InstrumentManager.instance.allInstruments.Add (obj);
+		//InstrumentManager.instance.allInstruments.Add (obj);
+
 	}
 }
