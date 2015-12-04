@@ -52,10 +52,17 @@
 	</gesture>
 	<gesture name="StartStop Instrument" timeout="0">
 		<input type="3">
-			<descriptor>left hand</descriptor>
+			<descriptor>right hand</descriptor>
 			<descriptor>up</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>10</descriptor>
+			<descriptor>20</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<input type="3">
+			<descriptor>right hand</descriptor>
+			<descriptor>down</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>20</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<output type="0">
