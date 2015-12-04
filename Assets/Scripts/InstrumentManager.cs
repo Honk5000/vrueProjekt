@@ -49,6 +49,7 @@ public class InstrumentManager : ScriptableObject
 		foreach (GameObject instrument in this.allInstruments) {
 
 			instrument.GetComponent<AudioSource>().volume = volume;
+
 		}
 	}
 }

@@ -252,7 +252,7 @@ public class HomerInteraction : ObjectSelectionBase
 	{
 		// create the lineRenderer when the gameObject is enabled
 		lineRenderer = gameObject.AddComponent<LineRenderer>();
-		lineRenderer.SetWidth(0.02f * 20, 0.02f * 20);
+		lineRenderer.SetWidth(0.02f * 10, 0.02f * 10);
 		lineRenderer.SetColors (Color.magenta, Color.magenta);
 		// just a start and end point is needed
 		lineRenderer.SetVertexCount (2);
