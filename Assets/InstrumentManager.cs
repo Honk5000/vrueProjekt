@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
-
+using System.Collections.Generic;
 namespace AssemblyCSharp
 {
 	public class InstrumentManager : ScriptableObject
@@ -32,7 +32,17 @@ namespace AssemblyCSharp
 			}
 		}
 
+		private List<GameObject> _allInstruments ;
+		public List<GameObject> allInstruments {
+			get {
+				if (_allInstruments == null) {
+					_allInstruments = new List<GameObject>();
 
+				}
+				return _allInstruments;
+			}
+
+		}
 
 	}
 }
