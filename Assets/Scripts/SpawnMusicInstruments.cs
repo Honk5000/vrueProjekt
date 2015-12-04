@@ -111,7 +111,7 @@ public class SpawnMusicInstruments : MonoBehaviour {
 	[RPC]
 	public void spawnInstrument(NetworkPlayer player)
 	{
-		GameObject obj = Network.Instantiate(instrumentPrefab,transform.position + new Vector3(0, 0, -1) * 1.5f,Quaternion.identity,0) as GameObject;
+		GameObject obj = Network.Instantiate(instrumentPrefab,transform.position + new Vector3(0, 0, -1) * 1.5f, instrumentPrefab.transform.rotation, 0) as GameObject;
 
 		//first set for server player
 		obj.GetComponent<UserManagementObjectController>().OnCreation(Network.player, false);
