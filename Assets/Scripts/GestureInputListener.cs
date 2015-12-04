@@ -50,10 +50,10 @@ public class GestureInputListener : MonoBehaviour {
 			else return;
 		}
 		// set volume on the server
-		//InstrumentManager.instance.setVolumeForAllInstruments (vol);
+		InstrumentManager.instance.setVolumeForAllInstruments (vol);
 
 		// broadcast an RPC call to others
-		_iC.RPC ("setVolumeForAllInstrumentsRPC", RPCMode.All, vol);
+		_iC.RPC ("setVolumeForAllInstrumentsRPC", RPCMode.Others, vol);
 	}
 	void Update () {
 		if (fadeOutDecrementPerSecond==0) fadeOutDecrementPerSecond = 1 / orchestraFadeOutDuration;
