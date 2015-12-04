@@ -34,6 +34,7 @@ public class GestureInputListener : MonoBehaviour {
 	private float fadeOutDecrementPerSecond =0;
 	private float lastVolume = 1;
 	private float nextCheckNotConductingTime = 0;
+	private float nextCheckActivatingTime = 0;
 	// adjust volume and broadcast it to other players
 
 	private GameObject _instrument = null;
@@ -115,8 +116,12 @@ public class GestureInputListener : MonoBehaviour {
 				//erst jetzt abfragen, damit auch nur angewählte Objekte markiert werden können
 				if (Input.GetButtonDown (activateInstrumentKeyName))
 				{
+
 					Debug.Log("Toggle PLAYING");
-					ic.playing = !(ic.playing);
+					if ( Time.time >= nextCheckActivatingTime) {
+						ic.playing = !(ic.playing);
+						nextCheckActivatingTime = Time.time + 1; // check again in 2 seconds
+					}
 				}
 			}
 
