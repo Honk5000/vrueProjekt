@@ -59,12 +59,13 @@ public class InstrumentController : UserManagementObjectController
 
 	public void Update()
 	{
-		if(inputListenerScript.selectedViewID.Equals(networkView.viewID) && Network.isClient)
+		if(Network.isClient && inputListenerScript.selectedViewID.Equals(networkView.viewID))
 		{
 			//pitch range should go from 1/3 to 3 (three times slower to three times faster)
 
 			//change the pitch according to the SpaceMouse y Axis rotation
 			GameObject sp = GameObject.Find("Spacemouse");
+			if (sp == null) return;
 			//rot = sp.transform.rotation.y;
 			if (sp.transform.rotation.y > pitchThreshold)
 			{
