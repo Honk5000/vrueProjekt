@@ -122,7 +122,10 @@ public class InstrumentController : UserManagementObjectController
 		InstrumentManager.instance.setVolumeForAllInstruments(volume);
 
 	}
-
+	[RPC]
+	public void setVolumeRPC(float volume) {
+		audioSourceComponent.volume = volume;
+	}
 }
 
 

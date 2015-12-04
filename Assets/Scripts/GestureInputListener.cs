@@ -38,7 +38,7 @@ public class GestureInputListener : MonoBehaviour {
 
 	private GameObject _instrument = null;
 	private NetworkView _iC = null;
-	private void adjustVolumeAndInformOthers(float vol) {
+	/*private void adjustVolumeAndInformOthers(float vol) {
 		if (_instrument == null || _iC == null) {
 			List<GameObject> all = InstrumentManager.instance.allInstruments;
 			if (all.Count >= 1) {
@@ -54,7 +54,7 @@ public class GestureInputListener : MonoBehaviour {
 
 		// broadcast an RPC call to others
 		_iC.RPC ("setVolumeForAllInstrumentsRPC", RPCMode.Others, vol);
-	}
+	}*/
 	void Update () {
 		if (fadeOutDecrementPerSecond==0) fadeOutDecrementPerSecond = 1 / orchestraFadeOutDuration;
 
