@@ -1,6 +1,6 @@
 <sensor>
 	<tracker>Microsoft</tracker>
-	<mirrormode>true</mirrormode>
+	<mirrormode>false</mirrormode>
 	<smoothing>true</smoothing>
 	<smoothingfactor>0.5</smoothingfactor>
 	<correction>0.5</correction>
@@ -54,13 +54,6 @@
 		<input type="3">
 			<descriptor>right hand</descriptor>
 			<descriptor>up</descriptor>
-			<descriptor>at least</descriptor>
-			<descriptor>20</descriptor>
-			<descriptor>cm/sec</descriptor>
-		</input>
-		<input type="3">
-			<descriptor>right hand</descriptor>
-			<descriptor>down</descriptor>
 			<descriptor>at least</descriptor>
 			<descriptor>20</descriptor>
 			<descriptor>cm/sec</descriptor>
