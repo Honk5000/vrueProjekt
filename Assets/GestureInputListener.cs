@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class GestureInputListener : MonoBehaviour {
-	public string activateInstrumentKeyName = "Fire2";
+	public string activateInstrumentKeyName = "ActivateInstrument";
+	public string conductKeyName = "Conduct";
 	public string virtualHandServerName = "VirtualHandServer(Clone)";
 
 	public NetworkViewID selectedViewID;
@@ -28,6 +29,14 @@ public class GestureInputListener : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Network.isServer) {
+			// Look out for the conducting gestures
+			if (Input.GetButtonDown (conductKeyName))
+			{
+				// a conducting gesture was performed.
+
+			}
+
+
 			GameObject vh = this.virtualHand;
 
 			if (vh != null) {
@@ -53,10 +62,12 @@ public class GestureInputListener : MonoBehaviour {
 				//erst jetzt abfragen, damit auch nur angewählte Objekte markiert werden können
 				if (Input.GetButtonDown (activateInstrumentKeyName))
 				{
-					//Debug.Log("Toggle PLAYING");
+					Debug.Log("Toggle PLAYING");
 					ic.playing = !(ic.playing);
 				}
 			}
+
+
 		}
 	}
 

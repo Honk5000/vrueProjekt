@@ -1,0 +1,69 @@
+<sensor>
+	<tracker>Microsoft</tracker>
+	<mirrormode>true</mirrormode>
+	<smoothing>true</smoothing>
+	<smoothingfactor>0.5</smoothingfactor>
+	<correction>0.5</correction>
+	<prediction>0.5</prediction>
+	<jitter>0.05</jitter>
+	<deviation>0.04</deviation>
+</sensor>
+<server>
+	<transformations>Global coordinates</transformations>
+	<automaticassignment>true</automaticassignment>
+</server>
+<gestures>
+	<gesture name="Gesture 1" timeout="0">
+		<input type="0">
+			<descriptor>lean</descriptor>
+			<descriptor>forward</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>20</descriptor>
+			<descriptor>degrees</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>w</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="Conducting Gesture" timeout="0">
+		<input type="3">
+			<descriptor>right hand</descriptor>
+			<descriptor>to the right</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<input type="3">
+			<descriptor>right hand</descriptor>
+			<descriptor>to the left</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>c</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="StartStop Instrument" timeout="0">
+		<input type="3">
+			<descriptor>left hand</descriptor>
+			<descriptor>up</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>a</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+</gestures>
+
