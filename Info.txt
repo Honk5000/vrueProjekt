@@ -1,6 +1,6 @@
 Server (Kinect User):
-Kann mittels "C" und durch rauf runter bewegen der rechten Hand das Orchester Spielen lassen und durch rauf runter bewegen der rechten Hand.
-Kann mittels "A" und  links rechts bewegung der rechten hand ein angewähltes Instrument starten oder stoppen lassen.
+Kann mittels "C" und links rechts bewegung der rechten Hand das Orchester Spielen lassen und durch rauf runter bewegen der rechten Hand.
+Kann mittels "A" und durch rauf runter bewegen der rechten Hand ein angewähltes Instrument starten oder stoppen lassen.
 
 Client (Spacemouse User):
 Kann mittels Steuerungstaste Instrumente aufheben.
