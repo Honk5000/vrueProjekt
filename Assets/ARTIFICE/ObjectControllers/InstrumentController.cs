@@ -117,6 +117,11 @@ public class InstrumentController : UserManagementObjectController
 	{
 		audioSourceComponent.pitch = pitchValue;
 	}
+	[RPC]
+	public void setVolumeForAllInstrumentsRPC(float volume) {
+		InstrumentManager.instance.setVolumeForAllInstruments(volume);
+
+	}
 
 }
 

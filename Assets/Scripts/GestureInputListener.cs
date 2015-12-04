@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class GestureInputListener : MonoBehaviour {
 	public string activateInstrumentKeyName = "ActivateInstrument";
 	public string conductKeyName = "Conduct";
@@ -34,6 +34,27 @@ public class GestureInputListener : MonoBehaviour {
 	private float fadeOutDecrementPerSecond =0;
 	private float lastVolume = 1;
 	private float nextCheckNotConductingTime = 0;
+	// adjust volume and broadcast it to other players
+
+	private GameObject _instrument = null;
+	private NetworkView _iC = null;
+	private void adjustVolumeAndInformOthers(float vol) {
+		if (_instrument == null || _iC == null) {
+			List<GameObject> all = InstrumentManager.instance.allInstruments;
+			if (all.Count >= 1) {
+				// obtain a reference to an instrument controller so we can broadcast the RPC
+				_instrument = all [0];
+				_iC = _instrument.GetComponent<NetworkView> ();
+
+			}
+			else return;
+		}
+		// set volume on the server
+		//InstrumentManager.instance.setVolumeForAllInstruments (vol);
+
+		// broadcast an RPC call to others
+		_iC.RPC ("setVolumeForAllInstrumentsRPC", RPCMode.All, vol);
+	}
 	void Update () {
 		if (fadeOutDecrementPerSecond==0) fadeOutDecrementPerSecond = 1 / orchestraFadeOutDuration;
 
@@ -51,7 +72,7 @@ public class GestureInputListener : MonoBehaviour {
 				}
 				conductingState = ConductingState.Conducting;
 			}
-			else if (conductingState == ConductingState.Conducting && Time.time >= nextCheckNotConductingTime) {
+			else if (conductingState == ConductingState.Conducting || conductingState == ConductingState.FadingOut && Time.time >= nextCheckNotConductingTime) {
 				// we're conducting, but not getting a button press here. also we're over the delay set by orchestraFadeOutDelay.
 				// wind down
 
@@ -60,6 +81,10 @@ public class GestureInputListener : MonoBehaviour {
 				if (newVolume <= 0) {
 					newVolume = 0;
 					conductingState = ConductingState.NotConducting;
+				}
+				else {
+					conductingState = ConductingState.FadingOut;
+
 				}
 				InstrumentManager.instance.setVolumeForAllInstruments(newVolume);
 				lastVolume = newVolume;
