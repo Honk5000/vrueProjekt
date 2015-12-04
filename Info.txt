@@ -1,0 +1,8 @@
+Server (Kinect User):
+Kann mittels "C" und durch rauf runter bewegen der rechten Hand das Orchester Spielen lassen und durch rauf runter bewegen der rechten Hand.
+Kann mittels "A" und  links rechts bewegung der rechten hand ein angewähltes Instrument starten oder stoppen lassen.
+
+Client (Spacemouse User):
+Kann mittels Steuerungstaste Instrumente aufheben.
+Kann mittels Steuerungstaste auf die kleinerern Instrumente auf dem unteren Bildschirmrand klicken, um neue Instrumente diesen Typs zu erstellen.
+Kann mittles drehen der Spacemouse wie einen Lautstärkeregler die Tonhöhe eines Instruments ändern, wenn zur selben Zeit der Kinect User mit seiner Hand darauf zeigt. (nach links drehen ist ein tieferer Ton und nach rechts drehen ein höherer Ton)

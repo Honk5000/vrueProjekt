@@ -47,8 +47,10 @@ public class InstrumentManager : ScriptableObject
 	public void setVolumeForAllInstruments(float volume) {
 		Debug.Log("SETVOLUME: " + volume);
 		foreach (GameObject instrument in this.allInstruments) {
+
 			instrument.GetComponent<NetworkView>().RPC("setVolumeRPC", RPCMode.All, volume);
 			//instrument.GetComponent<AudioSource>().volume = volume;
+
 		}
 
 
