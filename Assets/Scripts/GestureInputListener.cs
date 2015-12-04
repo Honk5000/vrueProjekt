@@ -33,7 +33,7 @@ public class GestureInputListener : MonoBehaviour {
 	private ConductingState conductingState = ConductingState.NotConducting;
 	private float fadeOutDecrementPerSecond =0;
 	private float lastVolume = 1;
-
+	private float nextCheckNotConductingTime = 0;
 	void Update () {
 		if (fadeOutDecrementPerSecond==0) fadeOutDecrementPerSecond = 1 / orchestraFadeOutDuration;
 
@@ -42,16 +42,20 @@ public class GestureInputListener : MonoBehaviour {
 			if (Input.GetButtonDown (conductKeyName))
 			{
 				// a conducting gesture was performed.
-				if (conductingState == ConductingState.NotConducting) {
+				nextCheckNotConductingTime = Time.time + orchestraFadeOutDelay;
+
+				if (conductingState == ConductingState.NotConducting || conductingState == ConductingState.FadingOut) {
 					// reset volume to 1
 					lastVolume = 1;
 					InstrumentManager.instance.setVolumeForAllInstruments(1);
 				}
 				conductingState = ConductingState.Conducting;
 			}
-			else if (conductingState == ConductingState.Conducting) {
-				// we're conducting, but not getting a button press here.
+			else if (conductingState == ConductingState.Conducting && Time.time >= nextCheckNotConductingTime) {
+				// we're conducting, but not getting a button press here. also we're over the delay set by orchestraFadeOutDelay.
 				// wind down
+
+
 				float newVolume = lastVolume - fadeOutDecrementPerSecond*Time.deltaTime;
 				if (newVolume <= 0) {
 					newVolume = 0;
