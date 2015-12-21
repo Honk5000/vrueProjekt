@@ -10,11 +10,16 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-
+using System.Linq;
 public class InstrumentManager : ScriptableObject
 {
+	public OrchestraMidiPlayer orchestraPlayer;
 	static readonly object padlock = new object();
 	private static InstrumentManager manager;
+	/// <summary>
+	/// Maps all the instrument GameObjects to their respective instrument types, so that it's easy to retrieve all instruments of a certain type.
+	/// </summary>
+	private Dictionary<InstrumentType, GameObject[]> instrumentTypeMap;
 
 	protected InstrumentManager () // don't allow instantiation of this object *from the outside*
 	{
@@ -55,7 +60,38 @@ public class InstrumentManager : ScriptableObject
 
 
 	}
+	public void addInstrument(GameObject instrument, InstrumentType instrumentType) {
+	
+	} 
+	/*private void doForAllInstrumentsOfType(InstrumentType type, Action<GameObject> action) {
+		foreach (GameObject instrument in instrumentTypeMap[type]) {
+			
+		}
+	}*/
+	public void setVolumeForInstrumentType(InstrumentType type, float volume) {
+		if (!instrumentTypeMap.ContainsKey (type))
+			return;
 
+
+	}
+	public void setPitchForInstrumentType(InstrumentType type, float volume) {
+		if (!instrumentTypeMap.ContainsKey (type))
+			return;
+	}
+	public void unmuteInstrumentType(InstrumentType type) {
+		if (!instrumentTypeMap.ContainsKey (type))
+			return;
+	}
+	public void muteInstrumentType (InstrumentType type) {
+		if (!instrumentTypeMap.ContainsKey (type))
+			return;
+	}
+	public void playAll() {
+
+	}
+	public void pauseAll() {
+
+	}
 
 }
 

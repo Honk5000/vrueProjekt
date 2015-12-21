@@ -7,7 +7,7 @@ public class GestureInputListener : MonoBehaviour {
 	public string virtualHandServerName = "VirtualHandServer(Clone)";
 	public float orchestraFadeOutDelay = 2; // the amount of seconds before the orchestra starts winding down
 	public float orchestraFadeOutDuration = 4; // the amount of time it takes the orchestra to wind down (reach zero volume)
-
+	public string midiPlayerGameObjectName = "MidiPlayer";
 	public NetworkViewID selectedViewID;
 
 	// Use this for initialization
@@ -23,8 +23,23 @@ public class GestureInputListener : MonoBehaviour {
 
 	}
 
+	GameObject _midiPlayer;
+	GameObject midiPlayer {
+		get {
+			if (_midiPlayer == null) {
+				_midiPlayer = GameObject.Find (midiPlayerGameObjectName);
+
+				Debug.Log ("Habe MidiPlayer");
+			}
+			return _midiPlayer;
+		}
+		
+	}
 	void Start () {
-	
+		// just play a MIDI
+		OrchestraMidiPlayer player = this.midiPlayer.GetComponent<OrchestraMidiPlayer> ();
+		player.LoadSong (new OrchestraSong ("MySong", "Midis/SuperMario64_-_DireDireDocksRemixXG.mid", null)); 
+		player.Play ();
 	}
 	 
 
@@ -69,7 +84,11 @@ public class GestureInputListener : MonoBehaviour {
 				if (conductingState == ConductingState.NotConducting || conductingState == ConductingState.FadingOut) {
 					// reset volume to 1
 					lastVolume = 1;
-					InstrumentManager.instance.setVolumeForAllInstruments(1);
+					//InstrumentManager.instance.setVolumeForAllInstruments(1);
+					this.midiPlayer.GetComponent<OrchestraMidiPlayer>().globalVolume = 1;
+
+					// start playing again
+					this.midiPlayer.GetComponent<OrchestraMidiPlayer>().Play ();
 				}
 				conductingState = ConductingState.Conducting;
 			}
@@ -82,12 +101,15 @@ public class GestureInputListener : MonoBehaviour {
 				if (newVolume <= 0) {
 					newVolume = 0;
 					conductingState = ConductingState.NotConducting;
+					// PAUSE midi playback
+					this.midiPlayer.GetComponent<OrchestraMidiPlayer>().Pause();
 				}
 				else {
 					conductingState = ConductingState.FadingOut;
 
 				}
-				InstrumentManager.instance.setVolumeForAllInstruments(newVolume);
+				//InstrumentManager.instance.setVolumeForAllInstruments(newVolume);
+				this.midiPlayer.GetComponent<OrchestraMidiPlayer>().globalVolume = newVolume;
 				lastVolume = newVolume;
 			}
 

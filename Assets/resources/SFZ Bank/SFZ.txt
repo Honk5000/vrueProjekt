@@ -1,0 +1,10 @@
+[BankFile]
+CasioPiano/sfz/1/24/i
+CasioPiano/sfz/1/24/i
+EpiphoneSteelChords/sfz/25/40/i/
+CasioViolin/sfz/41/56/i/
+CasioFlute/sfz/57/80/i
+Square/analog/81/81/i
+Sawtooth/analog/82/82/i
+Triangle/analog/83/104/i
+timbales/sfz/105/127/i

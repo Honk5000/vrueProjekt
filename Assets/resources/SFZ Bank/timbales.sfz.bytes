@@ -1,0 +1,54 @@
+// sustain pedal does rimshot
+<group>
+key=65
+loop_mode=one_shot
+seq_length=2
+locc64=0
+hicc64=63
+<region> sample=timbaleHi_1a.wav hivel=14
+<region> sample=timbaleHi_1b.wav hivel=14 seq_position=2
+<region> sample=timbaleHi_2a.wav lovel=15 hivel=29 
+<region> sample=timbaleHi_2b.wav lovel=15 hivel=29 seq_position=2
+<region> sample=timbaleHi_3a.wav lovel=30 hivel=44
+<region> sample=timbaleHi_3b.wav lovel=30 hivel=44 seq_position=2
+<region> sample=timbaleHi_4a.wav lovel=45 hivel=59
+<region> sample=timbaleHi_4b.wav lovel=45 hivel=59 seq_position=2
+<region> sample=timbaleHi_5a.wav lovel=60 hivel=74
+<region> sample=timbaleHi_5b.wav lovel=60 hivel=74 seq_position=2
+<region> sample=timbaleHi_6a.wav lovel=75 hivel=89
+<region> sample=timbaleHi_6b.wav lovel=75 hivel=89 seq_position=2
+<region> sample=timbaleHi_7a.wav lovel=90 hivel=103
+<region> sample=timbaleHi_7b.wav lovel=90 hivel=103 seq_position=2
+<region> sample=timbaleHi_8a.wav lovel=104 hivel=115
+<region> sample=timbaleHi_8b.wav lovel=104 hivel=115 seq_position=2
+<region> sample=timbaleHi_9a.wav lovel=116
+<region> sample=timbaleHi_9b.wav lovel=116 seq_position=2
+<group> key=65 loop_mode=one_shot seq_length=2 locc64=64 hicc64=127
+<region> sample=timbaleHi_10a.wav
+<region> sample=timbaleHi_10b.wav seq_position=2
+
+<group>
+key=66
+loop_mode=one_shot
+seq_length=2
+locc64=0
+hicc64=63
+<region> sample=timbaleLo_1a.wav hivel=16
+<region> sample=timbaleLo_1b.wav hivel=16 seq_position=2
+<region> sample=timbaleLo_2a.wav lovel=17 hivel=32
+<region> sample=timbaleLo_2b.wav lovel=17 hivel=32 seq_position=2
+<region> sample=timbaleLo_3a.wav lovel=33 hivel=48
+<region> sample=timbaleLo_3b.wav lovel=33 hivel=48 seq_position=2
+<region> sample=timbaleLo_4a.wav lovel=49 hivel=64
+<region> sample=timbaleLo_4b.wav lovel=49 hivel=64 seq_position=2
+<region> sample=timbaleLo_5a.wav lovel=65 hivel=80
+<region> sample=timbaleLo_5b.wav lovel=65 hivel=80 seq_position=2
+<region> sample=timbaleLo_6a.wav lovel=81 hivel=96
+<region> sample=timbaleLo_6b.wav lovel=81 hivel=96 seq_position=2
+<region> sample=timbaleLo_7a.wav lovel=97 hivel=111
+<region> sample=timbaleLo_7b.wav lovel=97 hivel=111 seq_position=2
+<region> sample=timbaleLo_8a.wav lovel=112
+<region> sample=timbaleLo_8a.wav lovel=112 seq_position=2
+<group> key=66 loop_mode=one_shot seq_length=2 locc64=64 hicc64=127
+<region> sample=timbaleLo_9a.wav
+<region> sample=timbaleLo_9b.wav seq_position=2
