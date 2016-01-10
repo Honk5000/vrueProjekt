@@ -38,6 +38,16 @@ public class GestureInputListener : MonoBehaviour {
 	void Start () {
 		// just play a MIDI
 		OrchestraMidiPlayer player = this.midiPlayer.GetComponent<OrchestraMidiPlayer> ();
+
+		// the table mapping instruments (actually InstrumentTypes) to channels in the MIDI 
+		Dictionary<InstrumentType, int[]> instrChannelMap = new Dictionary<InstrumentType, int[]>();
+		instrChannelMap[InstrumentType.Piano] = new int[]{0,1,8,12,14,15};
+		instrChannelMap[InstrumentType.Violin] = new int[]{5};
+		instrChannelMap[InstrumentType.Flute] = new int[]{11, 3,6};
+		instrChannelMap[InstrumentType.Guitar] = new int[]{7,9};
+		instrChannelMap[InstrumentType.Keyboard] = new int[]{2,4,10,13,11};
+
+
 		player.LoadSong (new OrchestraSong ("MySong", "Midis/SuperMario64_-_DireDireDocksRemixXG.mid", null)); 
 		player.Play ();
 	}
