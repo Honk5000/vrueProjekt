@@ -4,11 +4,20 @@ using System.Collections.Generic;
 
 public class AvatarObjectController : UserManagementObjectController {
 
-	public bool lastIsSelected = false;
-	public bool isCurrentlySelected = false;
+	private bool lastIsSelected = false;
+	private bool isCurrentlySelected = false;
 	//private List<GameObject> nearbyInstruments;
 
+	private GameObject leftHandObject = null;
+
 	public GameObject selectedInstrument = null;
+	private GameObject lastSelectedInstrument = null;
+	public float selectionRadius;
+
+	private Vector3 guitarPosition = new Vector3 (0.351f, 0.147f, 0.375f);
+	private Vector3 guitarRotation = new Vector3 (0, 130, 340);
+	private Vector3 guitarScale = new Vector3 (0.3f, 0.3f, 0.3f);
+	private string guitarHandPoint = "MM R Finger0";
 
 	// Use this for initialization
 	void Start () {
@@ -20,13 +29,19 @@ public class AvatarObjectController : UserManagementObjectController {
 
 		isCurrentlySelected = rigidbody.isKinematic;
 
+		if(isCurrentlySelected)
+		{
+			//no instrument should be selected, if the avatar is selected by the spacemouse
+			selectedInstrument = null;
+		}
+
 		if(!isCurrentlySelected && lastIsSelected)
 		{
 			//the avatar was selected previously and is now set in place:
 			//we have to select the nearest instrument that is within the reach of the avatar
 
 			selectedInstrument = null;
-			float shortestDistance = 9999999;
+			float shortestDistance = selectionRadius;
 
 			//the Update method always occures after the OnTrigger mehtods, so the nearbyInstruments list is already updated
 
@@ -35,13 +50,35 @@ public class AvatarObjectController : UserManagementObjectController {
 			foreach(GameObject instrument in allInstruments)
 			{
 				//check if this instrument is the one with the shortest distance to the avatar
-				float newDistance = Vector3.Distance(instrument.transform.position, transform.position);
+				//float newDistance = Vector3.Distance(instrument.transform.position, transform.position);
+
+				//better: calculate the distance from the avatar position to the closest point of the instruments collider
+				Collider instColl = instrument.GetComponent<Collider>();
+
+				if(instColl == null)
+					continue;
+
+				Vector3 closestPoint = instColl.ClosestPointOnBounds(transform.position);
+
+				float newDistance = Vector3.Distance(closestPoint, transform.position);
+
 				if(newDistance < shortestDistance)
 				{
 					//save the newly found instrument
 					selectedInstrument = instrument;
 					shortestDistance = newDistance;
 				}
+			}
+
+			if(selectedInstrument != null && selectedInstrument.name.Contains("guitar"))
+			{
+				//if we selected the guitar, we have to find the left Hand object
+				leftHandObject = GameObject.Find(guitarHandPoint);
+
+				// and attach the guitar to the hand
+				selectedInstrument.transform.parent = leftHandObject.transform;
+
+				selectedInstrument.rigidbody.useGravity = false;
 			}
 
 		}
@@ -57,27 +94,58 @@ public class AvatarObjectController : UserManagementObjectController {
 
 			if(selectedInstrument.name.Contains("piano"))
 			{
-				newPosition += new Vector3(0, 0, -1);
+				Vector3 forward = selectedInstrument.transform.up * -1;
+				Vector3 up = selectedInstrument.transform.forward;
+				newPosition += (forward * 1.5f + up * 0.5f);
 			}
 
 			if(selectedInstrument.name.Contains("guitar"))
 			{
-				newPosition += Vector3.zero;
+				//different approach:
+				//the guitar should be attached to the avatar model
+
+				//dont change avatar position
+				newPosition = transform.position;
+
+				selectedInstrument.transform.localPosition = guitarPosition;
+				selectedInstrument.transform.localEulerAngles = guitarRotation;
+
+				/*
+				Vector3 forward = selectedInstrument.transform.forward * -1;
+				Vector3 up = selectedInstrument.transform.right;
+				newPosition += (forward * 0.5f + up * 0.5f);
+				*/
 			}
 
 			if(selectedInstrument.name.Contains("pauke"))
 			{
-				newPosition += Vector3.zero;
+				Vector3 forward = selectedInstrument.transform.forward;
+				Vector3 up = selectedInstrument.transform.up;
+				newPosition += (forward * 1f + up * 0.5f);
 			}
 
 			if(selectedInstrument.name.Contains("Keyboard"))
 			{
-				newPosition += Vector3.zero;
+				Vector3 forward = selectedInstrument.transform.up;
+				Vector3 up = selectedInstrument.transform.forward * -1;
+				newPosition += (forward * 1f + up * 0.5f);
 			}
+
+			transform.position = newPosition;
+		}
+
+		//if the guitar is no longer selected
+		if(selectedInstrument == null && lastSelectedInstrument != null && lastSelectedInstrument.name.Contains("guitar"))
+		{
+			//detach it from the hand!
+			lastSelectedInstrument.transform.parent = null;
+
+			lastSelectedInstrument.rigidbody.useGravity = true;
 		}
 
 		//set this at the end
 		lastIsSelected = isCurrentlySelected;
+		lastSelectedInstrument = selectedInstrument;
 	}
 
 	/*
