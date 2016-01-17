@@ -62,7 +62,7 @@ public class OrchestraMidiPlayer : MonoBehaviour
 		midiSequencer = new MidiSequencer (synth);
 		midiSequencer.LoadMidi (song.midiFilename, false);
 		_readyToPlay = true;
-
+		_song = song;
 	}
 	public void Play() {
 		if (!_readyToPlay) {
@@ -77,7 +77,22 @@ public class OrchestraMidiPlayer : MonoBehaviour
 		_isPlaying = false;
 
 	}
-
+	public void muteInstrument(InstrumentType type) {
+		if (this.song == null)
+			return;
+		int[] associatedChannels = song.instrumentToChannelNumbersMap [type];
+		foreach (int channel in associatedChannels) {
+			midiSequencer.MuteChannel(channel);
+		}
+	}
+	public void unmuteInstrument(InstrumentType type) {
+		if (this.song == null)
+			return;
+		int[] associatedChannels = song.instrumentToChannelNumbersMap [type];
+		foreach (int channel in associatedChannels) {
+			midiSequencer.UnMuteChannel(channel);
+		}
+	}
 	private void Mix(float[] data, int channels)
 	{
 		int sample = data.Length / channels;
