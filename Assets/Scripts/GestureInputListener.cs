@@ -50,7 +50,8 @@ public class GestureInputListener : MonoBehaviour {
 
 		player.LoadSong (new OrchestraSong ("MySong", "Midis/SuperMario64_-_DireDireDocksRemixXG.mid", instrChannelMap)); 
 		player.muteAll ();
-		player.Play ();
+
+		//player.Play ();
 	}
 	 
 

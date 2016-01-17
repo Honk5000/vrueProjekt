@@ -79,6 +79,11 @@ public class InstrumentController : UserManagementObjectController
 		//midiPlayer.muteInstrument(
 		Debug.Log (this.instrumentType);
 		midiPlayer.unmuteInstrument (this.instrumentType);
+		if (!(midiPlayer.isPlaying) && midiPlayer.readyToPlay) {
+			// currently not playing. start playing.
+			midiPlayer.Play();
+		}
+
 		this.setAccessGrantedName ("player1");
 	} 
 	[RPC]
