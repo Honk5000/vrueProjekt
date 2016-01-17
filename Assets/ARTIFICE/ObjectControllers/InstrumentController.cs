@@ -10,7 +10,6 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 public class InstrumentController : UserManagementObjectController
 {
 	public string midiPlayerName = "MidiPlayer";
@@ -39,7 +38,7 @@ public class InstrumentController : UserManagementObjectController
 	}
 	private AudioSource audioSourceComponent;
 	public void Start() {
-		audioSourceComponent = this.GetComponent<AudioSource>();
+		//audioSourceComponent = this.GetComponent<AudioSource>();
 
 		inputListenerScript = GameObject.Find ("InputListenerObject").GetComponent<GestureInputListener>();
 
@@ -108,30 +107,31 @@ public class InstrumentController : UserManagementObjectController
 				//higher pitch!
 
 				//change pitch in 1/3 of the speed
-				float actualPitchSpeed = (audioSourceComponent.pitch >= 0) ? pitchSpeed : pitchSpeed/3f;
-				audioSourceComponent.pitch = Math.Min( currentPitch + (actualPitchSpeed * Time.deltaTime), maxPitchBend);
-
+				float actualPitchSpeed = (currentPitch >= 0) ? pitchSpeed : pitchSpeed/3f;
+				float newPitch = Math.Min( currentPitch + (actualPitchSpeed * Time.deltaTime), maxPitchBend);
+				networkView.RPC ("SetPitchRPC", RPCMode.All, newPitch);
 
 			
 			}
 			if(sp.transform.rotation.y < -pitchThreshold)
 			{
 				//lower pitch!
-				float actualPitchSpeed = (audioSourceComponent.pitch >= 0) ? pitchSpeed : pitchSpeed/3f;
+				float actualPitchSpeed = (currentPitch >= 0) ? pitchSpeed : pitchSpeed/3f;
 
-				audioSourceComponent.pitch = Math.Max( currentPitch - (actualPitchSpeed * Time.deltaTime), minPitchBend);
 
+				float newPitch = Math.Max( currentPitch - (actualPitchSpeed * Time.deltaTime), minPitchBend);
+				networkView.RPC ("SetPitchRPC", RPCMode.All, newPitch);
 			}
 
 			//now make an RPC call to the server to send the new pitch value
-			networkView.RPC ("SetPitchRPC", RPCMode.Server, audioSourceComponent.pitch);
+			//networkView.RPC ("SetPitchRPC", RPCMode.Server, audioSourceComponent.pitch);
 		}
 	}
 
 	[RPC]
 	public void SetPitchRPC(float pitchValue)
 	{
-		audioSourceComponent.pitch = pitchValue;
+		midiPlayer.setPitchBendForInstrument (this.instrumentType, pitchValue);
 	}
 	[RPC]
 	public void setVolumeForAllInstrumentsRPC(float volume) {
