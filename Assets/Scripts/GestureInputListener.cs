@@ -48,7 +48,8 @@ public class GestureInputListener : MonoBehaviour {
 		instrChannelMap[InstrumentType.Keyboard] = new int[]{2,4,10,13,11};
 
 
-		player.LoadSong (new OrchestraSong ("MySong", "Midis/SuperMario64_-_DireDireDocksRemixXG.mid", null)); 
+		player.LoadSong (new OrchestraSong ("MySong", "Midis/SuperMario64_-_DireDireDocksRemixXG.mid", instrChannelMap)); 
+		player.muteAll ();
 		player.Play ();
 	}
 	 

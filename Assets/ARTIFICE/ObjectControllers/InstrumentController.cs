@@ -78,11 +78,13 @@ public class InstrumentController : UserManagementObjectController
 	[RPC]
 	public void startPlayingRPC() {
 		//midiPlayer.muteInstrument(
+		Debug.Log (this.instrumentType);
+		midiPlayer.unmuteInstrument (this.instrumentType);
 		this.setAccessGrantedName ("player1");
 	} 
 	[RPC]
 	public void stopPlayingRPC() {
-		audioSourceComponent.Stop();
+		midiPlayer.muteInstrument (this.instrumentType);
 		this.setAccessGrantedName ("player2");
 	} 
 
@@ -93,42 +95,32 @@ public class InstrumentController : UserManagementObjectController
 			//pitch range should go from 1/3 to 3 (three times slower to three times faster)
 
 			//change the pitch according to the SpaceMouse y Axis rotation
+			float maxPitchBend = 12f;
+			float minPitchBend = -12f;
+			float currentPitch = midiPlayer.getPitchBendForInstrument(this.instrumentType);
+
 			GameObject sp = GameObject.Find("Spacemouse");
 			if (sp == null) return;
 			//rot = sp.transform.rotation.y;
+
 			if (sp.transform.rotation.y > pitchThreshold)
 			{
 				//higher pitch!
-				if(audioSourceComponent.pitch >= 1)
-				{
-					//change pitch in normal speed
-					audioSourceComponent.pitch += pitchSpeed * Time.deltaTime;
-				}
-				else
-				{
-					//change pitch in 1/3 of the speed
-					audioSourceComponent.pitch += pitchSpeed/3f * Time.deltaTime;
-				}
 
-				if(audioSourceComponent.pitch > 3)
-					audioSourceComponent.pitch = 3;
+				//change pitch in 1/3 of the speed
+				float actualPitchSpeed = (audioSourceComponent.pitch >= 0) ? pitchSpeed : pitchSpeed/3f;
+				audioSourceComponent.pitch = Math.Min( currentPitch + (actualPitchSpeed * Time.deltaTime), maxPitchBend);
+
+
+			
 			}
 			if(sp.transform.rotation.y < -pitchThreshold)
 			{
 				//lower pitch!
-				if(audioSourceComponent.pitch >= 1)
-				{
-					//change pitch in normal speed
-					audioSourceComponent.pitch -= pitchSpeed * Time.deltaTime;
-				}
-				else
-				{
-					//change pitch in 1/3 of the speed
-					audioSourceComponent.pitch -= pitchSpeed/3f * Time.deltaTime;
-				}
-				
-				if(audioSourceComponent.pitch < 1f/3f)
-					audioSourceComponent.pitch = 1f/3f;
+				float actualPitchSpeed = (audioSourceComponent.pitch >= 0) ? pitchSpeed : pitchSpeed/3f;
+
+				audioSourceComponent.pitch = Math.Max( currentPitch - (actualPitchSpeed * Time.deltaTime), minPitchBend);
+
 			}
 
 			//now make an RPC call to the server to send the new pitch value
@@ -148,7 +140,8 @@ public class InstrumentController : UserManagementObjectController
 	}
 	[RPC]
 	public void setVolumeRPC(float volume) {
-		audioSourceComponent.volume = volume;
+		//audioSourceComponent.volume = volume;
+		midiPlayer.setVolumeForInstrument (this.instrumentType, volume);
 	}
 }
 

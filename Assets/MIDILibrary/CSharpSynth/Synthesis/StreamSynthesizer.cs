@@ -170,6 +170,12 @@ namespace CSharpSynth.Synthesis
                 tunePositions_[channel] = semitones;
             }
         }
+		public float getPitchBend(int channel) {
+			if (channel > -1 && channel < tunePositions_.Length) {
+				return (float)(tunePositions_ [channel]);
+			} else
+				return 0;
+		}
         public void setSequencer(MidiSequencer sequencer)
         {
             this.seq = sequencer;

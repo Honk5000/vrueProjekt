@@ -85,6 +85,39 @@ public class OrchestraMidiPlayer : MonoBehaviour
 			midiSequencer.MuteChannel(channel);
 		}
 	}
+	public void setPitchBendForInstrument(InstrumentType type, float semitoneDifference) {
+		if (this.song == null)
+			return;
+		int[] associatedChannels = song.instrumentToChannelNumbersMap [type];
+		foreach (int channel in associatedChannels) {
+			synth.setPitchBend(channel, semitoneDifference);
+		}
+	}
+	public float getPitchBendForInstrument(InstrumentType type) {
+		if (this.song == null)
+			return 0;
+		int[] associatedChannels = song.instrumentToChannelNumbersMap [type];
+		if (associatedChannels.Length > 0) {
+			return synth.getPitchBend (associatedChannels [0]);
+		} else
+			return 0;
+	}
+	public void setVolumeForInstrument(InstrumentType type, float value) {
+		if (this.song == null)
+			return;
+		int[] associatedChannels = song.instrumentToChannelNumbersMap [type];
+		foreach (int channel in associatedChannels) {
+			synth.setVolume(channel, value);
+		}
+	}
+	public void volumeForInstrument(InstrumentType type) {
+	
+	}
+	public void muteAll() {
+		if (this.song == null)
+			return;
+		midiSequencer.MuteAllChannels();
+	}
 	public void unmuteInstrument(InstrumentType type) {
 		if (this.song == null)
 			return;
