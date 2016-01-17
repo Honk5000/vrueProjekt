@@ -13,6 +13,30 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class InstrumentController : UserManagementObjectController
 {
+	public string midiPlayerName = "MidiPlayer";
+	public string instrumentName = "";
+
+	private OrchestraMidiPlayer _midiPlayer = null;
+	private OrchestraMidiPlayer midiPlayer {
+		get {
+			if (_midiPlayer == null) _midiPlayer =  (OrchestraMidiPlayer)(GameObject.Find(midiPlayerName).GetComponent<OrchestraMidiPlayer>()); 
+			return _midiPlayer;
+		}
+	}
+	private InstrumentType _instrumentType = InstrumentType.NoInstrument;
+	public InstrumentType instrumentType {
+		get {
+			if (_instrumentType == InstrumentType.NoInstrument) {
+				InstrumentType iT = InstrumentTypeHelpers.stringToInstrumentType(instrumentName);
+				if (iT != null) {
+					_instrumentType = iT;
+				}
+			}
+			return _instrumentType;
+
+		}
+
+	}
 	private AudioSource audioSourceComponent;
 	public void Start() {
 		audioSourceComponent = this.GetComponent<AudioSource>();
@@ -53,7 +77,7 @@ public class InstrumentController : UserManagementObjectController
 
 	[RPC]
 	public void startPlayingRPC() {
-		audioSourceComponent.Play();
+		//midiPlayer.muteInstrument(
 		this.setAccessGrantedName ("player1");
 	} 
 	[RPC]
