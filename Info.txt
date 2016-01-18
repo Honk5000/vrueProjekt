@@ -2,10 +2,17 @@ Server (Kinect User):
 Kann mittels "C" und links rechts bewegung der rechten Hand das Orchester Spielen lassen und durch rauf runter bewegen der rechten Hand.
 Kann mittels "A" und durch rauf runter bewegen der rechten Hand ein angewähltes Instrument starten oder stoppen lassen.
 
+Wenn man an den Instrumenten ist kann man diese spielen, und dies wird auch aufgezeichnet.
+Bei Piano und Keyboard kann man mittels Geste oder mit "K" spielen (= lautstärke ändern)
+Bei Gitarre kann man mittels Geste oder "G" spielen.
+Bei der Flöte kann man mittels Geste oder "F" spielen.
+
 Client (Spacemouse User):
 Kann mittels Steuerungstaste Instrumente aufheben.
 Kann mittels Steuerungstaste auf die kleinerern Instrumente auf dem unteren Bildschirmrand klicken, um neue Instrumente diesen Typs zu erstellen.
 Kann mittles drehen der Spacemouse wie einen Lautstärkeregler die Tonhöhe eines Instruments ändern, wenn zur selben Zeit der Kinect User mit seiner Hand darauf zeigt. (nach links drehen ist ein tieferer Ton und nach rechts drehen ein höherer Ton)
+
+Er kann außerdem den Kinect User durch ziehen einem Instrument zuweisen und dann dessen Tonhöhe ändern.
 
 
 Instrumente können jederzeit vom Client hinzugefügt werden.
