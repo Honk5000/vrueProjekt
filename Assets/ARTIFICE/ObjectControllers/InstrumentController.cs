@@ -224,10 +224,11 @@ public class InstrumentController : UserManagementObjectController
 					//Debug.Log ("CHECK AT TIME + " + numberOfKeypressesSinceLastCheck);
 					// time to check how many keypresses we've had
 					if (numberOfKeypressesSinceLastCheck > 0) {
-						float newVolume = Mathf.Clamp((1/maxVolumeRate) * numberOfKeypressesSinceLastCheck, 0, 1);
+						float newVolume = Mathf.Clamp((1f/maxVolumeRate) * numberOfKeypressesSinceLastCheck, 0, 1);
+
 						this.networkView.RPC ("setVolumeRPC", RPCMode.All, newVolume);
 
-						Debug.Log(numberOfKeypressesSinceLastCheck + " KEYPRESSES");
+						Debug.Log(numberOfKeypressesSinceLastCheck + " KEYPRESSES - vol " + newVolume);
 						numberOfKeypressesSinceLastCheck = 0;
 					}
 					else {
