@@ -15,6 +15,9 @@ public class InstrumentController : UserManagementObjectController
 	public string midiPlayerName = "MidiPlayer";
 	public string instrumentName = "";
 
+	private GameObject avatarParent = null;
+	private AvatarObjectController avatarObjectController = null;
+
 	private OrchestraMidiPlayer _midiPlayer = null;
 	private OrchestraMidiPlayer midiPlayer {
 		get {
@@ -45,7 +48,8 @@ public class InstrumentController : UserManagementObjectController
 		InstrumentManager.instance.allInstruments.Add (this.gameObject);
 		Debug.Log ("Instrument count: " + InstrumentManager.instance.allInstruments.Count);
 		
-		
+		avatarParent = GameObject.Find ("avatarParent");
+		avatarObjectController = avatarParent.GetComponent<AvatarObjectController> ();
 	}
 	public InstrumentController ()
 	{
@@ -94,7 +98,7 @@ public class InstrumentController : UserManagementObjectController
 
 	public void Update()
 	{
-		if(Network.isClient && inputListenerScript.selectedViewID.Equals(networkView.viewID))
+		if(Network.isClient && (inputListenerScript.selectedViewID.Equals(networkView.viewID) || gameObject == avatarObjectController.selectedInstrument) )
 		{
 			//pitch range should go from 1/3 to 3 (three times slower to three times faster)
 
