@@ -25,6 +25,7 @@ public class AvatarObjectController : UserManagementObjectController {
 	private string fluteHandPoint = "MM R Finger0";
 
 	private Vector3 startRotation;
+	private bool setNextRotation = false;
 
 	// Use this for initialization
 	void Start () {
@@ -105,6 +106,13 @@ public class AvatarObjectController : UserManagementObjectController {
 					
 					selectedInstrument.rigidbody.useGravity = false;
 				}
+			}
+
+			if(setNextRotation)
+			{
+				//set the rotation back to start rotation:
+				transform.eulerAngles = startRotation;
+				setNextRotation = false;
 			}
 
 		}
@@ -198,8 +206,8 @@ public class AvatarObjectController : UserManagementObjectController {
 				lastSelectedInstrument.rigidbody.useGravity = true;
 			}
 
-			//set the rotation back to start rotation:
-			transform.eulerAngles = startRotation;
+			//When the avatar is deselected, set the old rotation back
+			setNextRotation = true;
 
 		}
 
