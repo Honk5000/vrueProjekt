@@ -19,9 +19,17 @@ public class AvatarObjectController : UserManagementObjectController {
 	private Vector3 guitarScale = new Vector3 (0.3f, 0.3f, 0.3f);
 	private string guitarHandPoint = "MM R Finger0";
 
+	private Vector3 flutePosition = new Vector3 (0, 0, 0);
+	private Vector3 fluteRotation = new Vector3 (0, 0, 0);
+	private Vector3 fluteScale = new Vector3(0.06f, 0.24f, 0.06f);
+	private string fluteHandPoint = "MM R Finger0";
+
+	private Vector3 startRotation;
+
 	// Use this for initialization
 	void Start () {
 		//nearbyInstruments = new List<GameObject> ();
+		startRotation = transform.eulerAngles;
 	}
 	
 	// Update is called once per frame
@@ -87,6 +95,16 @@ public class AvatarObjectController : UserManagementObjectController {
 
 					selectedInstrument.rigidbody.useGravity = false;
 				}
+
+				if (selectedInstrument.name.Contains("flute")) {
+					//if we selected the guitar, we have to find the left Hand object
+					leftHandObject = GameObject.Find(fluteHandPoint);
+					
+					// and attach the guitar to the hand
+					selectedInstrument.transform.parent = leftHandObject.transform;
+					
+					selectedInstrument.rigidbody.useGravity = false;
+				}
 			}
 
 		}
@@ -105,6 +123,8 @@ public class AvatarObjectController : UserManagementObjectController {
 				Vector3 forward = selectedInstrument.transform.up * -1;
 				Vector3 up = selectedInstrument.transform.forward;
 				newPosition += (forward * 1.5f + up * 0.5f);
+
+				transform.rotation = Quaternion.LookRotation(selectedInstrument.transform.position - transform.position);
 			}
 
 			if(selectedInstrument.name.Contains("guitar"))
@@ -130,6 +150,8 @@ public class AvatarObjectController : UserManagementObjectController {
 				Vector3 forward = selectedInstrument.transform.forward;
 				Vector3 up = selectedInstrument.transform.up;
 				newPosition += (forward * 1f + up * 0.5f);
+
+				transform.rotation = Quaternion.LookRotation(selectedInstrument.transform.position - transform.position);
 			}
 
 			if(selectedInstrument.name.Contains("Keyboard"))
@@ -137,6 +159,26 @@ public class AvatarObjectController : UserManagementObjectController {
 				Vector3 forward = selectedInstrument.transform.up;
 				Vector3 up = selectedInstrument.transform.forward * -1;
 				newPosition += (forward * 1f + up * 0.5f);
+
+				transform.rotation = Quaternion.LookRotation(selectedInstrument.transform.position - transform.position);
+			}
+
+			if(selectedInstrument.name.Contains("flute"))
+			{
+				//different approach:
+				//the guitar should be attached to the avatar model
+				
+				//dont change avatar position
+				newPosition = transform.position;
+				
+				selectedInstrument.transform.localPosition = flutePosition;
+				selectedInstrument.transform.localEulerAngles = fluteRotation;
+				
+				/*
+				Vector3 forward = selectedInstrument.transform.forward * -1;
+				Vector3 up = selectedInstrument.transform.right;
+				newPosition += (forward * 0.5f + up * 0.5f);
+				*/
 			}
 
 			transform.position = newPosition;
@@ -148,12 +190,16 @@ public class AvatarObjectController : UserManagementObjectController {
 		if(selectedInstrument == null && lastSelectedInstrument != null)
 		{
 			lastSelectedInstrument.networkView.RPC ("setMode", RPCMode.All, (int)(InstrumentMode.AIControlled));
-			if  (lastSelectedInstrument.name.Contains("guitar")) {
+
+			if  (lastSelectedInstrument.name.Contains("guitar") || lastSelectedInstrument.name.Contains("flute")) {
 				//detach guitar from hand!
 				lastSelectedInstrument.transform.parent = null;
 				
 				lastSelectedInstrument.rigidbody.useGravity = true;
 			}
+
+			//set the rotation back to start rotation:
+			transform.eulerAngles = startRotation;
 
 		}
 
