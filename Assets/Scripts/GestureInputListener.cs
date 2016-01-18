@@ -97,7 +97,7 @@ public class GestureInputListener : MonoBehaviour {
 					// reset volume to 1
 					lastVolume = 1;
 					//InstrumentManager.instance.setVolumeForAllInstruments(1);
-					this.midiPlayer.networkView.RPC("setGlobalVolume", RPCMode.All, newVolume); 
+					this.midiPlayer.networkView.RPC("setGlobalVolume", RPCMode.All, 1); 
 
 					// start playing again
 					this.midiPlayer.networkView.RPC ("playRPC", RPCMode.All);
