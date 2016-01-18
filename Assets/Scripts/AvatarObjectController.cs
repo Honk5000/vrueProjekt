@@ -164,8 +164,8 @@ public class AvatarObjectController : UserManagementObjectController {
 
 			if(selectedInstrument.name.Contains("Keyboard"))
 			{
-				Vector3 forward = selectedInstrument.transform.up;
-				Vector3 up = selectedInstrument.transform.forward * -1;
+				Vector3 forward = selectedInstrument.transform.forward;
+				Vector3 up = selectedInstrument.transform.up;
 				newPosition += (forward * 1f + up * 0.5f);
 
 				transform.rotation = Quaternion.LookRotation(selectedInstrument.transform.position - transform.position);
