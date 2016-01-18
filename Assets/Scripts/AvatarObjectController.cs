@@ -68,18 +68,25 @@ public class AvatarObjectController : UserManagementObjectController {
 					//save the newly found instrument
 					selectedInstrument = instrument;
 					shortestDistance = newDistance;
+
+
 				}
 			}
 
-			if(selectedInstrument != null && selectedInstrument.name.Contains("guitar"))
+			if(selectedInstrument != null)  
 			{
-				//if we selected the guitar, we have to find the left Hand object
-				leftHandObject = GameObject.Find(guitarHandPoint);
+				// put the selected instrument into "player controlled" mode
+				selectedInstrument.networkView.RPC ("setMode", RPCMode.All, (int)(InstrumentMode.PlayerControlled));
 
-				// and attach the guitar to the hand
-				selectedInstrument.transform.parent = leftHandObject.transform;
+				if (selectedInstrument.name.Contains("guitar")) {
+					//if we selected the guitar, we have to find the left Hand object
+					leftHandObject = GameObject.Find(guitarHandPoint);
 
-				selectedInstrument.rigidbody.useGravity = false;
+					// and attach the guitar to the hand
+					selectedInstrument.transform.parent = leftHandObject.transform;
+
+					selectedInstrument.rigidbody.useGravity = false;
+				}
 			}
 
 		}
@@ -134,8 +141,7 @@ public class AvatarObjectController : UserManagementObjectController {
 
 			transform.position = newPosition;
 
-			// put the selected instrument into "player controlled" mode
-			selectedInstrument.networkView.RPC ("setMode", RPCMode.All, (int)(InstrumentMode.PlayerControlled));
+
 		}
 
 		//if the instrument is no longer selected
