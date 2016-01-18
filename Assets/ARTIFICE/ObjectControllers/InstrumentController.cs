@@ -28,10 +28,12 @@ public class InstrumentController : UserManagementObjectController
 			_mode = value;
 
 			if (value == InstrumentMode.PlayerControlled) {
-				this.gameObject.renderer.material.color = Color.red;
+				//this.gameObject.renderer.material.color = Color.red;
+				Debug.Log (this.instrumentName " is now PLAYER CONTROLLED");
 			}
 			else {
-				this.gameObject.renderer.material.color = Color.white;
+				//this.gameObject.renderer.material.color = Color.white;
+				Debug.Log (this.instrumentName " is now back to being AI CONTROLLED");
 			}
 		}
 	}
