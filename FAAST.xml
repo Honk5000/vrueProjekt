@@ -23,7 +23,7 @@
 		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
-			<descriptor>w</descriptor>
+			<descriptor>a</descriptor>
 			<descriptor>for</descriptor>
 			<descriptor>0</descriptor>
 		</output>
@@ -50,20 +50,64 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="StartStop Instrument" timeout="0">
+	<gesture name="Keyboard Gesture" timeout="0">
+		<input type="3">
+			<descriptor>left hand</descriptor>
+			<descriptor>down</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>40</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
 		<input type="3">
 			<descriptor>right hand</descriptor>
-			<descriptor>up</descriptor>
+			<descriptor>down</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>40</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>k</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="Flute Gesture" timeout="0">
+		<input type="3">
+			<descriptor>head</descriptor>
+			<descriptor>to the left</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>20</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<input type="3">
+			<descriptor>head</descriptor>
+			<descriptor>to the right</descriptor>
 			<descriptor>at least</descriptor>
 			<descriptor>20</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
-			<descriptor>a</descriptor>
+			<descriptor>f</descriptor>
 			<descriptor>for</descriptor>
 			<descriptor>0</descriptor>
 		</output>
+	</gesture>
+	<gesture name="Guitar Gesture" timeout="0">
+		<input type="2">
+			<descriptor>left arm</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>45</descriptor>
+			<descriptor>degrees</descriptor>
+		</input>
+		<input type="3">
+			<descriptor>right hand</descriptor>
+			<descriptor>down</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>50</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
 	</gesture>
 </gestures>
 
