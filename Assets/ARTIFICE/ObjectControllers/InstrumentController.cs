@@ -9,12 +9,26 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 public enum InstrumentMode {
 	AIControlled,
 	PlayerControlled
 }
+
 public class InstrumentController : UserManagementObjectController
 {
+
+	const float recordingUpdateFrameLengthMS = 100; // in MS
+	private int currentRecordingUpdateFrame = 0; // the current frame within the recording period
+
+	public const float NoPitchChange = -13f;
+	public const float NoVolumeChange = -1f;
+	private class PitchAndVolume {
+		public float pitch = NoPitchChange;
+		public float volume = NoVolumeChange;
+	}
+	private List<PitchAndVolume> recordingData = null; // = new ArrayList<PitchAndVolume>(); // allow recording up to 20 seconds
 	public InstrumentMode _mode = InstrumentMode.AIControlled;
 	[RPC]
 	public void setMode(int mode) {
@@ -30,10 +44,14 @@ public class InstrumentController : UserManagementObjectController
 			if (value == InstrumentMode.PlayerControlled) {
 				//this.gameObject.renderer.material.color = Color.red;
 				Debug.Log (this.instrumentName + " is now PLAYER CONTROLLED");
+				// start a new recording buffer
+				recordingData = new List<PitchAndVolume>();
+				currentRecordingUpdateFrame = 0;
 			}
 			else {
 				//this.gameObject.renderer.material.color = Color.white;
 				Debug.Log (this.instrumentName + " is now back to being AI CONTROLLED");
+				currentRecordingUpdateFrame = 0;
 			}
 		}
 	}
@@ -120,7 +138,33 @@ public class InstrumentController : UserManagementObjectController
 		midiPlayer.muteInstrument (this.instrumentType);
 		this.setAccessGrantedName ("player2");
 	} 
+	private int counter = 0;
+	// don't save values for every iteration, just every ten 
+	public void FixedUpdate() {
+		counter++;
+		if (counter < 10)
+			return;
+		else
+			counter = 0;
 
+
+		if (this.mode == InstrumentMode.PlayerControlled) { 
+
+			currentRecordingUpdateFrame++;
+		} else if (this.mode == InstrumentMode.AIControlled && recordingData != null) {
+			currentRecordingUpdateFrame++;
+			if (currentRecordingUpdateFrame > recordingData.Count) currentRecordingUpdateFrame = 0;
+
+			// we have recording data, so we need to make sure to set pitch & volume accordingly
+			PitchAndVolume thisFrameRecordingData = recordingData[currentRecordingUpdateFrame];
+			if (thisFrameRecordingData != null) {
+				if (thisFrameRecordingData.pitch != NoPitchChange) this.networkView.RPC ("SetPitchRPC", RPCMode.All, thisFrameRecordingData.pitch);
+				if (thisFrameRecordingData.volume != NoVolumeChange) this.networkView.RPC ("setVolumeRPC", RPCMode.All, thisFrameRecordingData.volume);
+
+			}
+		}
+
+	}
 	public void Update()
 	{
 		if(Network.isClient && (inputListenerScript.selectedViewID.Equals(networkView.viewID) || gameObject == avatarObjectController.selectedInstrument) )
@@ -165,6 +209,15 @@ public class InstrumentController : UserManagementObjectController
 	[RPC]
 	public void SetPitchRPC(float pitchValue)
 	{
+		// record the action
+		if (this.mode == InstrumentMode.PlayerControlled) {
+			PitchAndVolume pav = new PitchAndVolume();
+			pav.pitch = pitchValue;
+			pav.volume = NoVolumeChange;
+
+			recordingData[currentRecordingUpdateFrame] =  pav;
+
+		}
 		midiPlayer.setPitchBendForInstrument (this.instrumentType, pitchValue);
 	}
 	[RPC]
@@ -174,6 +227,15 @@ public class InstrumentController : UserManagementObjectController
 	}
 	[RPC]
 	public void setVolumeRPC(float volume) {
+		// record the action
+		if (this.mode == InstrumentMode.PlayerControlled) {
+			PitchAndVolume pav = new PitchAndVolume();
+			pav.pitch = NoPitchChange;
+			pav.volume = volume;
+			
+			recordingData[currentRecordingUpdateFrame] =  pav;
+			
+		}
 		//audioSourceComponent.volume = volume;
 		midiPlayer.setVolumeForInstrument (this.instrumentType, volume);
 	}
