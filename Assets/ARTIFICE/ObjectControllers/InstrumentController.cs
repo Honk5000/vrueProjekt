@@ -218,22 +218,25 @@ public class InstrumentController : UserManagementObjectController
 		} else if (Network.isServer) {
 			if (this.mode == InstrumentMode.PlayerControlled) {
 				if (Time.time >= nextCheckAtTime) {
+					//Debug.Log ("CHECK AT TIME + " + numberOfKeypressesSinceLastCheck);
 					// time to check how many keypresses we've had
 					if (numberOfKeypressesSinceLastCheck > 0) {
 						float newVolume = Mathf.Clamp((1/maxVolumeRate) * numberOfKeypressesSinceLastCheck, 0, 1);
 						this.networkView.RPC ("setVolumeRPC", RPCMode.All, newVolume);
+						numberOfKeypressesSinceLastCheck = 0;
 					}
 					else {
 						// no keypresses at all! zero volume
 						this.networkView.RPC ("setVolumeRPC", RPCMode.All, 0f);
 					}
-					numberOfKeypressesSinceLastCheck = 0;
+
 					nextCheckAtTime = Time.time + keypressCheckInterval;
 
 
 				}
 				if (Input.GetKeyDown(this.gestureKey)) {
 					numberOfKeypressesSinceLastCheck++;
+
 				} 
 			}
 		}
