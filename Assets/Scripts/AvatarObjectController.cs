@@ -45,7 +45,8 @@ public class AvatarObjectController : UserManagementObjectController {
 
 			//the Update method always occures after the OnTrigger mehtods, so the nearbyInstruments list is already updated
 
-			GameObject[] allInstruments = GameObject.FindGameObjectsWithTag("SpawnedInstrument");
+			List<GameObject> allInstruments = InstrumentManager.instance.allInstruments;//GameObject.FindGameObjectsWithTag("SpawnedInstrument");
+
 
 			foreach(GameObject instrument in allInstruments)
 			{
@@ -132,15 +133,22 @@ public class AvatarObjectController : UserManagementObjectController {
 			}
 
 			transform.position = newPosition;
+
+			// put the selected instrument into "player controlled" mode
+			lastSelectedInstrument.networkView.RPC ("setMode", RPCMode.All, InstrumentMode.PlayerControlled);
 		}
 
-		//if the guitar is no longer selected
-		if(selectedInstrument == null && lastSelectedInstrument != null && lastSelectedInstrument.name.Contains("guitar"))
+		//if the instrument is no longer selected
+		if(selectedInstrument == null && lastSelectedInstrument != null)
 		{
-			//detach it from the hand!
-			lastSelectedInstrument.transform.parent = null;
+			lastSelectedInstrument.networkView.RPC ("setMode", RPCMode.All, InstrumentMode.AIControlled);
+			if  (lastSelectedInstrument.name.Contains("guitar")) {
+				//detach guitar from hand!
+				lastSelectedInstrument.transform.parent = null;
+				
+				lastSelectedInstrument.rigidbody.useGravity = true;
+			}
 
-			lastSelectedInstrument.rigidbody.useGravity = true;
 		}
 
 		//set this at the end

@@ -9,9 +9,32 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
-
+public enum InstrumentMode {
+	AIControlled,
+	PlayerControlled
+}
 public class InstrumentController : UserManagementObjectController
 {
+	public InstrumentMode _mode = InstrumentMode.AIControlled;
+	[RPC]
+	public void setMode(InstrumentMode mode) {
+		this.mode = mode;
+	}
+	public InstrumentMode mode {
+		get {
+			return _mode;
+		}
+		set {
+			_mode = value;
+
+			if (value == InstrumentMode.PlayerControlled) {
+				this.gameObject.renderer.material.color = Color.red;
+			}
+			else {
+				this.gameObject.renderer.material.color = Color.white;
+			}
+		}
+	}
 	public string midiPlayerName = "MidiPlayer";
 	public string instrumentName = "";
 
