@@ -19,10 +19,10 @@ public class AvatarObjectController : UserManagementObjectController {
 	private Vector3 guitarScale = new Vector3 (0.3f, 0.3f, 0.3f);
 	private string guitarHandPoint = "MM R Finger0";
 
-	private Vector3 flutePosition = new Vector3 (0, 0, 0);
+	private Vector3 flutePosition = new Vector3 (-0.058f, 0.344f, 0);
 	private Vector3 fluteRotation = new Vector3 (0, 0, 0);
 	private Vector3 fluteScale = new Vector3(0.06f, 0.24f, 0.06f);
-	private string fluteHandPoint = "MM R Finger0";
+	private string fluteHandPoint = "MM Head";
 
 	private Vector3 startRotation;
 	private bool setNextRotation = false;
