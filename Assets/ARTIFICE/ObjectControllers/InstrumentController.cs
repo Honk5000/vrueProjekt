@@ -49,6 +49,8 @@ public class InstrumentController : UserManagementObjectController
 				// start a new recording buffer
 				recordingData = new Dictionary<int, PitchAndVolume>();
 				currentRecordingUpdateFrame = 0;
+				lastRecordingFrame = 0;
+				recordingDataLength = 0;
 			}
 			else {
 				//this.gameObject.renderer.material.color = Color.white;
