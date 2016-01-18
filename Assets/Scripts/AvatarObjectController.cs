@@ -135,7 +135,7 @@ public class AvatarObjectController : UserManagementObjectController {
 			transform.position = newPosition;
 
 			// put the selected instrument into "player controlled" mode
-			selectedInstrument.networkView.RPC ("setMode", RPCMode.All, InstrumentMode.PlayerControlled);
+			selectedInstrument.networkView.RPC ("setMode", RPCMode.All, (int)(InstrumentMode.PlayerControlled));
 		}
 
 		//if the instrument is no longer selected
