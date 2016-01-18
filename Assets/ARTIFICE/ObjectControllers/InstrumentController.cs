@@ -19,7 +19,7 @@ public enum InstrumentMode {
 
 public class InstrumentController : UserManagementObjectController
 {
-
+	public KeyCode gestureKey;
 	const float recordingUpdateFrameLengthMS = 100; // in MS
 	private int currentRecordingUpdateFrame = 0; // the current frame within the recording period
 	private int lastRecordingFrame = 0;
@@ -172,44 +172,70 @@ public class InstrumentController : UserManagementObjectController
 		}
 
 	}
+
+	private int numberOfKeypressesSinceLastCheck = 0;
+	private float nextCheckAtTime = 0;
+	public float keypressCheckInterval = 2f;
+	public int maxVolumeRate = 5; // number of triggers per interval to achive max. volume
+
 	public void Update()
 	{
-		if(Network.isClient && (inputListenerScript.selectedViewID.Equals(networkView.viewID) || gameObject == avatarObjectController.selectedInstrument) )
-		{
+
+		if (Network.isClient && (inputListenerScript.selectedViewID.Equals (networkView.viewID) || gameObject == avatarObjectController.selectedInstrument)) {
 			//pitch range should go from 1/3 to 3 (three times slower to three times faster)
 
 			//change the pitch according to the SpaceMouse y Axis rotation
 			float maxPitchBend = 12f;
 			float minPitchBend = -12f;
-			float currentPitch = midiPlayer.getPitchBendForInstrument(this.instrumentType);
+			float currentPitch = midiPlayer.getPitchBendForInstrument (this.instrumentType);
 
-			GameObject sp = GameObject.Find("Spacemouse");
-			if (sp == null) return;
+			GameObject sp = GameObject.Find ("Spacemouse");
+			if (sp == null)
+				return;
 			//rot = sp.transform.rotation.y;
 
-			if (sp.transform.rotation.y > pitchThreshold)
-			{
+			if (sp.transform.rotation.y > pitchThreshold) {
 				//higher pitch!
 
 				//change pitch in 1/3 of the speed
-				float actualPitchSpeed = (currentPitch >= 0) ? pitchSpeed : pitchSpeed/3f;
-				float newPitch = Math.Min( currentPitch + (actualPitchSpeed * Time.deltaTime), maxPitchBend);
+				float actualPitchSpeed = (currentPitch >= 0) ? pitchSpeed : pitchSpeed / 3f;
+				float newPitch = Math.Min (currentPitch + (actualPitchSpeed * Time.deltaTime), maxPitchBend);
 				networkView.RPC ("SetPitchRPC", RPCMode.All, newPitch);
 
 			
 			}
-			if(sp.transform.rotation.y < -pitchThreshold)
-			{
+			if (sp.transform.rotation.y < -pitchThreshold) {
 				//lower pitch!
-				float actualPitchSpeed = (currentPitch >= 0) ? pitchSpeed : pitchSpeed/3f;
+				float actualPitchSpeed = (currentPitch >= 0) ? pitchSpeed : pitchSpeed / 3f;
 
 
-				float newPitch = Math.Max( currentPitch - (actualPitchSpeed * Time.deltaTime), minPitchBend);
+				float newPitch = Math.Max (currentPitch - (actualPitchSpeed * Time.deltaTime), minPitchBend);
 				networkView.RPC ("SetPitchRPC", RPCMode.All, newPitch);
 			}
 
 			//now make an RPC call to the server to send the new pitch value
 			//networkView.RPC ("SetPitchRPC", RPCMode.Server, audioSourceComponent.pitch);
+		} else if (Network.isServer) {
+			if (this.mode == InstrumentMode.PlayerControlled) {
+				if (Time.time >= nextCheckAtTime) {
+					// time to check how many keypresses we've had
+					if (numberOfKeypressesSinceLastCheck > 0) {
+						float newVolume = Mathf.Clamp((1/maxVolumeRate) * numberOfKeypressesSinceLastCheck, 0, 1);
+						this.networkView.RPC ("setVolumeRPC", RPCMode.All, newVolume);
+					}
+					else {
+						// no keypresses at all! zero volume
+						this.networkView.RPC ("setVolumeRPC", RPCMode.All, 0f);
+					}
+					numberOfKeypressesSinceLastCheck = 0;
+					nextCheckAtTime = Time.time + keypressCheckInterval;
+
+
+				}
+				if (Input.GetKeyDown(this.gestureKey)) {
+					numberOfKeypressesSinceLastCheck++;
+				} 
+			}
 		}
 	}
 
@@ -217,7 +243,7 @@ public class InstrumentController : UserManagementObjectController
 	public void SetPitchRPC(float pitchValue)
 	{
 		// record the action
-		if (this.mode == InstrumentMode.PlayerControlled) {
+		if (this.mode == InstrumentMode.PlayerControlled && Network.isServer) {
 			PitchAndVolume pav = new PitchAndVolume();
 			pav.pitch = pitchValue;
 			pav.volume = NoVolumeChange;
@@ -235,7 +261,7 @@ public class InstrumentController : UserManagementObjectController
 	[RPC]
 	public void setVolumeRPC(float volume) {
 		// record the action
-		if (this.mode == InstrumentMode.PlayerControlled) {
+		if (this.mode == InstrumentMode.PlayerControlled && Network.isServer) {
 			PitchAndVolume pav = new PitchAndVolume();
 			pav.pitch = NoPitchChange;
 			pav.volume = volume;
