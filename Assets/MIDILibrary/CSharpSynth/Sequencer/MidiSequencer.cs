@@ -360,5 +360,12 @@ namespace CSharpSynth.Sequencer
             }
             sampleTime = sampleTime + amount;
         }
+		public MidiEvent[] allEvents {
+			get {
+				MidiEvent[] allEvents = new MidiEvent[_MidiFile.Tracks[0].MidiEvents.Length];
+				_MidiFile.Tracks[0].MidiEvents.CopyTo(allEvents, 0);
+				return allEvents;
+			}
+		}
     }
 }

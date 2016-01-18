@@ -49,6 +49,18 @@ public class OrchestraMidiPlayer : MonoBehaviour
 			return _isPlaying;
 		}
 	}
+	[RPC]
+	public void setGlobalVolume(float newVolume) {
+		this.globalVolume = newVolume;
+	}
+	[RPC]
+	public void playRPC() {
+		this.Play ();
+	}
+	[RPC]
+	public void pauseRPC() {
+		this.Pause();
+	}
 	void Awake ()
 	{
 		synth.LoadBank (bankFilePath);

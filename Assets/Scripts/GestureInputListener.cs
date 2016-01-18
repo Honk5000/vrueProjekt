@@ -97,10 +97,10 @@ public class GestureInputListener : MonoBehaviour {
 					// reset volume to 1
 					lastVolume = 1;
 					//InstrumentManager.instance.setVolumeForAllInstruments(1);
-					this.midiPlayer.GetComponent<OrchestraMidiPlayer>().globalVolume = 1;
+					this.midiPlayer.networkView.RPC("setGlobalVolume", RPCMode.All, newVolume); 
 
 					// start playing again
-					this.midiPlayer.GetComponent<OrchestraMidiPlayer>().Play ();
+					this.midiPlayer.networkView.RPC ("playRPC", RPCMode.All);
 				}
 				conductingState = ConductingState.Conducting;
 			}
@@ -114,14 +114,15 @@ public class GestureInputListener : MonoBehaviour {
 					newVolume = 0;
 					conductingState = ConductingState.NotConducting;
 					// PAUSE midi playback
-					this.midiPlayer.GetComponent<OrchestraMidiPlayer>().Pause();
+					this.midiPlayer.networkView.RPC ("pauseRPC", RPCMode.All);
 				}
 				else {
 					conductingState = ConductingState.FadingOut;
 
 				}
 				//InstrumentManager.instance.setVolumeForAllInstruments(newVolume);
-				this.midiPlayer.GetComponent<OrchestraMidiPlayer>().globalVolume = newVolume;
+				this.midiPlayer.networkView.RPC("setGlobalVolume", RPCMode.All, newVolume); 
+				//this.midiPlayer.GetComponent<OrchestraMidiPlayer>().globalVolume = newVolume;
 				lastVolume = newVolume;
 			}
 
