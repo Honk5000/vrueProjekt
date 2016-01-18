@@ -141,7 +141,7 @@ public class AvatarObjectController : UserManagementObjectController {
 		//if the instrument is no longer selected
 		if(selectedInstrument == null && lastSelectedInstrument != null)
 		{
-			lastSelectedInstrument.networkView.RPC ("setMode", RPCMode.All, InstrumentMode.AIControlled);
+			lastSelectedInstrument.networkView.RPC ("setMode", RPCMode.All, (int)(InstrumentMode.AIControlled));
 			if  (lastSelectedInstrument.name.Contains("guitar")) {
 				//detach guitar from hand!
 				lastSelectedInstrument.transform.parent = null;

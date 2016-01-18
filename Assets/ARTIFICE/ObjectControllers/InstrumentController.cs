@@ -17,8 +17,8 @@ public class InstrumentController : UserManagementObjectController
 {
 	public InstrumentMode _mode = InstrumentMode.AIControlled;
 	[RPC]
-	public void setMode(InstrumentMode mode) {
-		this.mode = mode;
+	public void setMode(int mode) {
+		this.mode = (InstrumentMode)mode;
 	}
 	public InstrumentMode mode {
 		get {
