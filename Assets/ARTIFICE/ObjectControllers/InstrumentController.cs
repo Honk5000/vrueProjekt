@@ -215,7 +215,7 @@ public class InstrumentController : UserManagementObjectController
 			pav.pitch = pitchValue;
 			pav.volume = NoVolumeChange;
 
-			recordingData[currentRecordingUpdateFrame] =  pav;
+			recordingData.Insert(currentRecordingUpdateFrame, pav);
 
 		}
 		midiPlayer.setPitchBendForInstrument (this.instrumentType, pitchValue);
@@ -233,7 +233,7 @@ public class InstrumentController : UserManagementObjectController
 			pav.pitch = NoPitchChange;
 			pav.volume = volume;
 			
-			recordingData[currentRecordingUpdateFrame] =  pav;
+			recordingData.Insert(currentRecordingUpdateFrame, pav);
 			
 		}
 		//audioSourceComponent.volume = volume;
