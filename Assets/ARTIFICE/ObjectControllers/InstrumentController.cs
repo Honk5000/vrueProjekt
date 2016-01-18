@@ -146,6 +146,9 @@ public class InstrumentController : UserManagementObjectController
 	private int counter = 0;
 	// don't save values for every iteration, just every ten 
 	public void FixedUpdate() {
+		if (!(Network.isServer))
+			return; 
+		 
 		counter++;
 		if (counter < 10)
 			return;
@@ -223,11 +226,14 @@ public class InstrumentController : UserManagementObjectController
 					if (numberOfKeypressesSinceLastCheck > 0) {
 						float newVolume = Mathf.Clamp((1/maxVolumeRate) * numberOfKeypressesSinceLastCheck, 0, 1);
 						this.networkView.RPC ("setVolumeRPC", RPCMode.All, newVolume);
+
+						Debug.Log(numberOfKeypressesSinceLastCheck + " KEYPRESSES");
 						numberOfKeypressesSinceLastCheck = 0;
 					}
 					else {
 						// no keypresses at all! zero volume
 						this.networkView.RPC ("setVolumeRPC", RPCMode.All, 0f);
+						Debug.Log ("NO KEYPRESSES");
 					}
 
 					nextCheckAtTime = Time.time + keypressCheckInterval;
@@ -246,7 +252,7 @@ public class InstrumentController : UserManagementObjectController
 	public void SetPitchRPC(float pitchValue)
 	{
 		// record the action
-		if (this.mode == InstrumentMode.PlayerControlled && Network.isServer) {
+		if (this.mode == InstrumentMode.PlayerControlled && recordingData != null &&  Network.isServer) {
 			PitchAndVolume pav = new PitchAndVolume();
 			pav.pitch = pitchValue;
 			pav.volume = NoVolumeChange;
@@ -264,7 +270,7 @@ public class InstrumentController : UserManagementObjectController
 	[RPC]
 	public void setVolumeRPC(float volume) {
 		// record the action
-		if (this.mode == InstrumentMode.PlayerControlled && Network.isServer) {
+		if (this.mode == InstrumentMode.PlayerControlled && recordingData != null   && Network.isServer) {
 			PitchAndVolume pav = new PitchAndVolume();
 			pav.pitch = NoPitchChange;
 			pav.volume = volume;
