@@ -161,12 +161,14 @@ public class InstrumentController : UserManagementObjectController
 			if (currentRecordingUpdateFrame > lastRecordingFrame) currentRecordingUpdateFrame = 0;
 
 			// we have recording data, so we need to make sure to set pitch & volume accordingly
-			PitchAndVolume thisFrameRecordingData = recordingData[currentRecordingUpdateFrame];
-			if (thisFrameRecordingData != null) {
-				if (thisFrameRecordingData.pitch != NoPitchChange) this.networkView.RPC ("SetPitchRPC", RPCMode.All, thisFrameRecordingData.pitch);
-				if (thisFrameRecordingData.volume != NoVolumeChange) this.networkView.RPC ("setVolumeRPC", RPCMode.All, thisFrameRecordingData.volume);
+			PitchAndVolume pav;
+			if (recordingData.TryGetValue(currentRecordingUpdateFrame, out pav)) {
+				if (pav.pitch != NoPitchChange) this.networkView.RPC ("SetPitchRPC", RPCMode.All, pav.pitch);
+				if (pav.volume != NoVolumeChange) this.networkView.RPC ("setVolumeRPC", RPCMode.All, pav.volume);
 
 			}
+
+
 		}
 
 	}
