@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
 public enum InstrumentMode {
 	AIControlled,
 	PlayerControlled
@@ -21,14 +22,15 @@ public class InstrumentController : UserManagementObjectController
 
 	const float recordingUpdateFrameLengthMS = 100; // in MS
 	private int currentRecordingUpdateFrame = 0; // the current frame within the recording period
-
+	private int lastRecordingFrame = 0;
 	public const float NoPitchChange = -13f;
 	public const float NoVolumeChange = -1f;
 	private class PitchAndVolume {
 		public float pitch = NoPitchChange;
 		public float volume = NoVolumeChange;
 	}
-	private List<PitchAndVolume> recordingData = null; // = new ArrayList<PitchAndVolume>(); // allow recording up to 20 seconds
+	private Dictionary<int, PitchAndVolume> recordingData = null; // = new ArrayList<PitchAndVolume>(); // allow recording up to 20 seconds
+	private int recordingDataLength = 0;
 	public InstrumentMode _mode = InstrumentMode.AIControlled;
 	[RPC]
 	public void setMode(int mode) {
@@ -45,13 +47,14 @@ public class InstrumentController : UserManagementObjectController
 				//this.gameObject.renderer.material.color = Color.red;
 				Debug.Log (this.instrumentName + " is now PLAYER CONTROLLED");
 				// start a new recording buffer
-				recordingData = new List<PitchAndVolume>();
+				recordingData = new Dictionary<int, PitchAndVolume>();
 				currentRecordingUpdateFrame = 0;
 			}
 			else {
 				//this.gameObject.renderer.material.color = Color.white;
 				Debug.Log (this.instrumentName + " is now back to being AI CONTROLLED");
 				currentRecordingUpdateFrame = 0;
+				recordingDataLength = lastRecordingFrame;
 			}
 		}
 	}
@@ -153,7 +156,7 @@ public class InstrumentController : UserManagementObjectController
 			currentRecordingUpdateFrame++;
 		} else if (this.mode == InstrumentMode.AIControlled && recordingData != null) {
 			currentRecordingUpdateFrame++;
-			if (currentRecordingUpdateFrame > recordingData.Count) currentRecordingUpdateFrame = 0;
+			if (currentRecordingUpdateFrame > lastRecordingFrame) currentRecordingUpdateFrame = 0;
 
 			// we have recording data, so we need to make sure to set pitch & volume accordingly
 			PitchAndVolume thisFrameRecordingData = recordingData[currentRecordingUpdateFrame];
@@ -215,8 +218,8 @@ public class InstrumentController : UserManagementObjectController
 			pav.pitch = pitchValue;
 			pav.volume = NoVolumeChange;
 
-			recordingData.Insert(currentRecordingUpdateFrame, pav);
-
+			recordingData[currentRecordingUpdateFrame] = pav;
+			lastRecordingFrame = currentRecordingUpdateFrame;
 		}
 		midiPlayer.setPitchBendForInstrument (this.instrumentType, pitchValue);
 	}
@@ -232,8 +235,8 @@ public class InstrumentController : UserManagementObjectController
 			PitchAndVolume pav = new PitchAndVolume();
 			pav.pitch = NoPitchChange;
 			pav.volume = volume;
-			
-			recordingData.Insert(currentRecordingUpdateFrame, pav);
+			lastRecordingFrame = currentRecordingUpdateFrame;
+			recordingData[currentRecordingUpdateFrame] = pav;
 			
 		}
 		//audioSourceComponent.volume = volume;
