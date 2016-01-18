@@ -29,11 +29,11 @@ public class InstrumentController : UserManagementObjectController
 
 			if (value == InstrumentMode.PlayerControlled) {
 				//this.gameObject.renderer.material.color = Color.red;
-				Debug.Log (this.instrumentName " is now PLAYER CONTROLLED");
+				Debug.Log (this.instrumentName + " is now PLAYER CONTROLLED");
 			}
 			else {
 				//this.gameObject.renderer.material.color = Color.white;
-				Debug.Log (this.instrumentName " is now back to being AI CONTROLLED");
+				Debug.Log (this.instrumentName + " is now back to being AI CONTROLLED");
 			}
 		}
 	}
